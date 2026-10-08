@@ -1,31 +1,11 @@
-"use client";
+import { signInStaff } from "./actions";
 
-import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-
-export default function LoginPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
-    setError("");
-
-    const result = await authClient.signIn.email({ email, password });
-    if (result.error) {
-      setError("Email o password non validi.");
-      setLoading(false);
-      return;
-    }
-
-    router.push("/");
-    router.refresh();
-  }
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
 
   return (
     <main className="auth-shell">
@@ -35,13 +15,12 @@ export default function LoginPage() {
         <h1>Accesso staff</h1>
         <p className="muted">Accedi per creare e gestire i preventivi.</p>
 
-        <form onSubmit={submit} className="auth-form">
+        <form action={signInStaff} className="auth-form">
           <label>
             Email
             <input
               type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              name="email"
               autoComplete="email"
               required
             />
@@ -50,16 +29,13 @@ export default function LoginPage() {
             Password
             <input
               type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              name="password"
               autoComplete="current-password"
               required
             />
           </label>
-          {error && <p className="form-error">{error}</p>}
-          <button className="primary-button" disabled={loading}>
-            {loading ? "Accesso..." : "Accedi"}
-          </button>
+          {params.error && <p className="form-error">Email o password non validi.</p>}
+          <button className="primary-button">Accedi</button>
         </form>
       </section>
     </main>
