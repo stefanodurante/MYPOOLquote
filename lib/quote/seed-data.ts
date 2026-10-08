@@ -1,0 +1,63 @@
+import type { CatalogModel } from "./types";
+
+export const SEED_MODELS: CatalogModel[] = [
+  {
+    id: "fluidra_8x4",
+    label: "Fluidra Skimmer Residential (8 x 4 m)",
+    l: 8,
+    w: 4,
+    h: 1.4,
+    type: "skimmer",
+  },
+  {
+    id: "liberty_6x3",
+    label: "Puls Vetroresina Monoblocco Liberty (6 x 3 m)",
+    l: 6,
+    w: 3,
+    h: 1.3,
+    type: "vetroresina",
+  },
+  {
+    id: "puls_lagos_5x3",
+    label: "Puls Fuori Terra Pannellato (5 x 3 m)",
+    l: 5,
+    w: 3,
+    h: 1.2,
+    type: "fuoriterra",
+  },
+  {
+    id: "mirror_10x5",
+    label: "Fluidra Mirror High-End (10 x 5 m)",
+    l: 10,
+    w: 5,
+    h: 1.5,
+    type: "sfioratore",
+  },
+];
+
+export const SEED_PRICES: { key: string; label: string; category: string; value: number }[] = [
+  { key: "base_mat_skimmer", label: "Costo base struttura skimmer €/mq", category: "structure", value: 140 },
+  { key: "base_mat_sfioratore", label: "Costo base struttura sfioratore €/mq", category: "structure", value: 185 },
+  { key: "base_mat_vetroresina", label: "Costo base struttura vetroresina €/mq", category: "structure", value: 160 },
+  { key: "base_mat_fuoriterra", label: "Costo base struttura fuori terra €/mq", category: "structure", value: 110 },
+  { key: "solarium_per_mq", label: "Solarium €/mq", category: "edile", value: 55 },
+  { key: "shower_standard", label: "Doccia solare standard", category: "impianto", value: 450 },
+  { key: "shower_luxury", label: "Doccia solare luxury", category: "impianto", value: 850 },
+  { key: "heatpump_inverter_std", label: "Pompa di calore inverter eco", category: "impianto", value: 1800 },
+  { key: "heatpump_inverter_pro", label: "Pompa di calore inverter pro", category: "impianto", value: 2800 },
+  { key: "cover_bubble", label: "Copertura isotermica a bolle", category: "impianto", value: 650 },
+  { key: "cover_automatic", label: "Tapparella automatica", category: "impianto", value: 4500 },
+  { key: "lining_1000", label: "Alkorplan 1000 €/mq", category: "lining", value: 32 },
+  { key: "lining_2000", label: "Alkorplan 2000 €/mq", category: "lining", value: 38 },
+  { key: "lining_touch", label: "Alkorplan Touch €/mq", category: "lining", value: 48 },
+  { key: "lining_evolve", label: "Alkorplan Evolve €/mq", category: "lining", value: 55 },
+  { key: "filter_small", label: "Filtro + pompa (portata bassa)", category: "impianto", value: 1600 },
+  { key: "filter_large", label: "Filtro + pompa (portata alta)", category: "impianto", value: 2400 },
+  { key: "filter_flow_threshold", label: "Soglia portata filtro m³/h", category: "impianto", value: 25 },
+  { key: "skimmer_unit", label: "Skimmer Fluidra", category: "impianto", value: 120 },
+  { key: "jet_unit", label: "Bocchetta", category: "impianto", value: 45 },
+  { key: "overflow_per_meter", label: "Canale sfioratore €/m", category: "impianto", value: 95 },
+  { key: "led_unit", label: "Faro LED", category: "impianto", value: 220 },
+  { key: "electric_base", label: "Quadro elettrico CE", category: "impianto", value: 450 },
+  { key: "pipes_per_mq", label: "Tubazioni PN16 €/mq vasca", category: "impianto", value: 12 },
+];
