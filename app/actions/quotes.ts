@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { catalogModels, catalogPrices, clients, quotes } from "@/lib/db/schema";
 import { requireStaff } from "@/lib/session";
+import { validateQuotePayload } from "@/lib/quote/validation";
 import type {
   AppVersion,
   BomState,
@@ -95,6 +96,7 @@ export async function saveQuote(payload: {
   totals: QuoteTotals;
 }): Promise<{ id: string }> {
   const session = await requireStaff();
+  validateQuotePayload(payload);
   const now = new Date();
   const id = payload.id ?? crypto.randomUUID();
 
