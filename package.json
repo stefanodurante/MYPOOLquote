@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check:env": "tsx scripts/check-env.ts",
+    "test:quote": "tsx scripts/test-quote.ts",
     "setup": "bash scripts/setup.sh",
     "db:push": "drizzle-kit push",
     "reset:staff": "tsx scripts/reset-staff.ts",
