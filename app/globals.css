@@ -319,6 +319,36 @@ h1 {
   cursor: pointer;
 }
 
+.catalog-admin-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.catalog-admin-row {
+  display: grid;
+  grid-template-columns: 1fr 150px auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.catalog-admin-row small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+.catalog-admin-row input[type="number"] {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(3, 7, 18, 0.75);
+  color: var(--foreground);
+}
+
 .builder-tabs button.active {
   background: #0369a1;
   color: white;
@@ -369,6 +399,10 @@ h1 {
 
 @media (max-width: 600px) {
   .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .catalog-admin-row {
     grid-template-columns: 1fr;
   }
 }

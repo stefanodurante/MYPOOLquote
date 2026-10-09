@@ -27,7 +27,7 @@ export default async function Home({
         <div className="brand"><img src="/logo-piscina.png" alt="MYPOOL" /><div><p className="eyebrow">MYPOOL QUOTATION</p><h1>Preventivi</h1></div></div>
         <span className="user-pill">{session?.user.name ?? "Staff"}</span>
       </header>
-      <section className="dashboard-hero"><div><p className="muted">Area riservata staff</p><h2>Gestisci i tuoi preventivi</h2><p className="muted">Cataloghi attivi: {catalog.models.length} · Voci di listino: {Object.keys(catalog.prices).length}</p></div><Link href="/quotes/new" className="primary-button">Nuovo preventivo</Link></section>
+      <section className="dashboard-hero"><div><p className="muted">Area riservata staff</p><h2>Gestisci i tuoi preventivi</h2><p className="muted">Cataloghi attivi: {catalog.models.length} · Voci di listino: {Object.keys(catalog.prices).length}</p></div><div className="builder-actions"><Link href="/admin/catalog" className="secondary-button">Catálogo</Link><Link href="/quotes/new" className="primary-button">Nuovo preventivo</Link></div></section>
       <section className="quote-list">
         <div className="section-heading"><h2>Preventivos recientes</h2><span className="muted">Página {page}</span></div>
         <form className="quote-filters">
