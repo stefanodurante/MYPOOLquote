@@ -41,15 +41,28 @@ export async function loadCatalog(): Promise<{
   };
 }
 
-export async function listQuotes(): Promise<
-  (Pick<
+export async function listQuotes(options: { search?: string; status?: string; page?: number } = {}): Promise<{
+  quotes: (Pick<
     SavedQuote,
     "id" | "clientName" | "appVersion" | "quoteMode" | "status" | "createdAt" | "updatedAt"
-  > & { total: number })[]
-> {
+  > & { total: number })[];
+  hasMore: boolean;
+}> {
   await requireStaff();
+  const page = Math.max(1, options.page ?? 1);
+  const pageSize = 10;
   const rows = await db.select().from(quotes).orderBy(quotes.updatedAt);
-  return rows.reverse().map((row) => ({
+  const filtered = rows.reverse().filter((row) => {
+    const matchesSearch =
+      !options.search ||
+      `${row.clientName} ${row.clientAddress}`.toLowerCase().includes(options.search.toLowerCase());
+    return matchesSearch && (!options.status || row.status === options.status);
+  });
+  const pageRows = filtered.slice((page - 1) * pageSize, page * pageSize + 1);
+  const hasMore = pageRows.length > pageSize;
+  return {
+    hasMore,
+    quotes: pageRows.slice(0, pageSize).map((row) => ({
     id: row.id,
     clientName: row.clientName,
     appVersion: row.appVersion as AppVersion,
@@ -58,7 +71,8 @@ export async function listQuotes(): Promise<
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
     total: (row.totals as QuoteTotals).total ?? 0,
-  }));
+    })),
+  };
 }
 
 export async function getQuote(id: string): Promise<SavedQuote | null> {
