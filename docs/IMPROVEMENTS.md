@@ -10,11 +10,11 @@
 
 ## Próximo ciclo
 
-1. Edición y detalle de presupuestos guardados.
-2. Búsqueda, filtros, paginación y estados del presupuesto.
-3. Panel de administración de catálogo y precios.
-4. Historial/auditoría de cambios de precios y presupuestos.
-5. Exportación de PDF con logo, numeración y datos fiscales configurables.
+1. [x] Edición y detalle de presupuestos guardados (`/quotes/[id]` y `/quotes/new?edit=...`).
+2. [x] Búsqueda, filtros, paginación y estados del presupuesto en el dashboard.
+3. [x] Panel staff de administración de catálogo y precios (`/admin/catalog`).
+4. [x] Historial/auditoría de creación y actualización de presupuestos.
+5. [x] Exportación de PDF con logo, numeración y datos fiscales del presupuesto.
 
 ## Futuro
 
