@@ -23,6 +23,7 @@
 3. Multiempresa/multitenant para instaladores.
 4. Notificaciones por email y seguimiento de aceptación.
 5. Monitoring, backups verificados y preview deployments.
+6. Localización de la aplicación en italiano (`it`), español (`es`) e inglés (`en`), con italiano como idioma inicial.
 
 ## Incidencias resueltas
 
