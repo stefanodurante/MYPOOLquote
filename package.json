@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:env": "tsx scripts/check-env.ts",
     "test:quote": "tsx scripts/test-quote.ts",
+    "test:integration": "tsx scripts/test-integration.ts",
     "setup": "bash scripts/setup.sh",
     "db:push": "drizzle-kit push",
     "reset:staff": "tsx scripts/reset-staff.ts",

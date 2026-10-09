@@ -21,10 +21,12 @@ jobs:
       - run: npm run build
 
   schema:
-    if: ${{ secrets.TEST_DATABASE_URL != '' }}
+    if: ${{ secrets.TEST_DATABASE_URL != '' && secrets.TEST_BETTER_AUTH_SECRET != '' }}
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+      BETTER_AUTH_SECRET: ${{ secrets.TEST_BETTER_AUTH_SECRET }}
+      BETTER_AUTH_ALLOW_SIGNUP: "true"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,3 +35,4 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run db:push
+      - run: npm run test:integration

@@ -2,7 +2,7 @@
 
 ## Antes de producción
 
-1. [ ] Automatizar tests de cálculo, login, autorización y persistencia (cálculo cubierto; faltan login, autorización y persistencia).
+1. [x] Automatizar tests de cálculo, login, autorización y persistencia (`npm run test:quote` y `npm run test:integration`).
 2. [x] Añadir páginas de error y logging estructurado.
 3. [x] Revisar rate limiting, CSRF, orígenes confiables y cookies HTTPS.
 4. [x] Añadir validación server-side de todos los inputs y límites numéricos.
