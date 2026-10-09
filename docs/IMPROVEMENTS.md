@@ -25,7 +25,8 @@ aplicación.
 
 ### P0 — Fundación multiusuario
 
-1. Definir los roles `staff`, `professional` y `customer`, con permisos separados.
+1. [x] Definir los roles `staff`, `professional` y `customer`, con permisos separados
+   (base de roles y helpers implementada; faltan sus flujos de producto).
 2. Añadir aislamiento de datos por profesional/organización (`organizationId` o equivalente)
    en usuarios, clientes, presupuestos, catálogo y eventos.
 3. Aplicar autorización server-side para impedir que un profesional vea o modifique datos
