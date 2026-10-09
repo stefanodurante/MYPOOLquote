@@ -18,6 +18,15 @@ export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
   trustedOrigins,
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 10,
+    storage: "memory",
+  },
+  advanced: {
+    useSecureCookies: process.env.NODE_ENV === "production",
+  },
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
