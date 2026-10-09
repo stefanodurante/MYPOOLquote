@@ -119,7 +119,7 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
         </div>
         {appVersion === "pro" && <ul className="bom-editor">{result.items.map((item) => <li key={item.key}><label><input type="checkbox" checked={result.bom[item.key]?.checked ?? true} onChange={() => toggleItem(item.key)} />{item.name}</label><strong>€ {euro(result.bom[item.key]?.price ?? item.price)}</strong></li>)}</ul>}
         <div className="total-box"><p>Imponibile: € {euro(result.totals.imponibile)}</p><p>IVA: € {euro(result.totals.vat)}</p><strong>Totale: € {euro(result.totals.total)}</strong></div>
-        <div className="builder-actions"><button className="primary-button" onClick={save}>Salva preventivo</button><button className="secondary-button" onClick={() => generateQuotePdf({ party, inputs, appVersion, quoteMode, items: result.items, bom: result.bom, totals: result.totals })}>Genera PDF</button>{message && <span className="muted">{message}</span>}</div>
+        <div className="builder-actions"><button className="primary-button" onClick={save}>Salva preventivo</button><button className="secondary-button" onClick={async () => generateQuotePdf({ party, inputs, appVersion, quoteMode, items: result.items, bom: result.bom, totals: result.totals })}>Genera PDF</button>{message && <span className="muted">{message}</span>}</div>
       </section>
     </div>
   );

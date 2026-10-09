@@ -10,7 +10,7 @@ import type {
   QuoteTotals,
 } from "./types";
 
-export function generateQuotePdf(opts: {
+export async function generateQuotePdf(opts: {
   party: QuoteParty;
   inputs: QuoteInputs;
   appVersion: AppVersion;
@@ -21,6 +21,24 @@ export function generateQuotePdf(opts: {
 }) {
   const { party, inputs, appVersion, quoteMode, items, bom, totals } = opts;
   const doc = new jsPDF();
+  const quoteNumber = `MP-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}-${party.clientName
+    .replace(/[^a-zA-Z0-9]/g, "")
+    .slice(0, 8)
+    .toUpperCase()}`;
+
+  try {
+    const response = await fetch("/logo-piscina.png");
+    const logoData = await response.blob();
+    const reader = new FileReader();
+    const logo = await new Promise<string>((resolve, reject) => {
+      reader.onload = () => resolve(String(reader.result));
+      reader.onerror = reject;
+      reader.readAsDataURL(logoData);
+    });
+    doc.addImage(logo, "PNG", 166, 8, 28, 28);
+  } catch {
+    // PDF generation remains available if the optional logo asset cannot load.
+  }
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
@@ -38,6 +56,7 @@ export function generateQuotePdf(opts: {
   doc.setFontSize(10);
   doc.setTextColor(100);
   doc.text(`Data: ${new Date().toLocaleDateString("it-IT")}`, 14, 32);
+  doc.text(`Nº: ${quoteNumber}`, 170, 32, { align: "right" });
 
   doc.setTextColor(0);
   doc.setFont("helvetica", "bold");
