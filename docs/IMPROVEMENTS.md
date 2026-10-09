@@ -2,11 +2,11 @@
 
 ## Antes de producción
 
-1. [ ] Automatizar tests de cálculo, login, autorización y persistencia.
+1. [ ] Automatizar tests de cálculo, login, autorización y persistencia (cálculo cubierto; faltan login, autorización y persistencia).
 2. [x] Añadir páginas de error y logging estructurado.
 3. [x] Revisar rate limiting, CSRF, orígenes confiables y cookies HTTPS.
 4. [x] Añadir validación server-side de todos los inputs y límites numéricos.
-5. Añadir CI con lint, typecheck, build y migración en una base de prueba.
+5. [x] Añadir CI con lint, typecheck, build y migración en una base de prueba (requiere configurar `TEST_DATABASE_URL` en GitHub).
 
 ## Próximo ciclo
 
