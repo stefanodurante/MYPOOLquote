@@ -2,10 +2,10 @@
 
 ## Antes de producción
 
-1. Automatizar tests de cálculo, login, autorización y persistencia.
-2. Añadir páginas de error y logging estructurado.
-3. Revisar rate limiting, CSRF, orígenes confiables y cookies HTTPS.
-4. Añadir validación server-side de todos los inputs y límites numéricos.
+1. [ ] Automatizar tests de cálculo, login, autorización y persistencia.
+2. [x] Añadir páginas de error y logging estructurado.
+3. [x] Revisar rate limiting, CSRF, orígenes confiables y cookies HTTPS.
+4. [x] Añadir validación server-side de todos los inputs y límites numéricos.
 5. Añadir CI con lint, typecheck, build y migración en una base de prueba.
 
 ## Próximo ciclo
@@ -23,3 +23,9 @@
 3. Multiempresa/multitenant para instaladores.
 4. Notificaciones por email y seguimiento de aceptación.
 5. Monitoring, backups verificados y preview deployments.
+
+## Incidencias resueltas
+
+- Desactivado Turbopack en desarrollo para evitar errores de chunks SSR y del React Client Manifest.
+- Documentado el reinicio limpio de Next.js eliminando `.next` cuando quedan artefactos obsoletos.
+- Verificado el build de producción, el typecheck y el test de cálculo de presupuestos.
