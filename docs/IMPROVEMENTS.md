@@ -17,14 +17,43 @@
 4. [x] Historial/auditoría de creación y actualización de presupuestos.
 5. [x] Exportación de PDF con logo, numeración y datos fiscales del presupuesto.
 
-## Futuro
+## Backlog futuro priorizado
 
-1. Rol `customer` con acceso de solo lectura.
-2. Vinculación cliente-usuario y enlaces seguros de presupuesto.
-3. Multiempresa/multitenant para instaladores.
-4. Notificaciones por email y seguimiento de aceptación.
-5. Monitoring, backups verificados y preview deployments.
-6. Localización de la aplicación en italiano (`it`), español (`es`) e inglés (`en`), con italiano como idioma inicial.
+Las tareas están ordenadas por dependencia e importancia comercial. El rol `professional`
+debe implementarse antes que `customer`, porque será el usuario principal de pago de la
+aplicación.
+
+### P0 — Fundación multiusuario
+
+1. Definir los roles `staff`, `professional` y `customer`, con permisos separados.
+2. Añadir aislamiento de datos por profesional/organización (`organizationId` o equivalente)
+   en usuarios, clientes, presupuestos, catálogo y eventos.
+3. Aplicar autorización server-side para impedir que un profesional vea o modifique datos
+   de otro profesional.
+4. Añadir tests de autorización y aislamiento entre dos profesionales.
+
+### P1 — Producto para profesionales
+
+5. Crear onboarding y perfil profesional: empresa, datos fiscales, logo y configuración de
+   presupuestos.
+6. Permitir que cada profesional gestione sus clientes y sus presupuestos.
+7. Permitir catálogo, precios y plantillas propias por profesional.
+8. Adaptar el PDF para utilizar los datos fiscales y la marca del profesional.
+9. Añadir dashboard profesional con estados, búsqueda, filtros e historial.
+
+### P2 — Acceso del cliente final
+
+10. Vincular clientes finales con un profesional.
+11. Crear enlaces seguros para que el cliente consulte únicamente sus presupuestos.
+12. Añadir seguimiento de envío, visualización, aceptación o rechazo del presupuesto.
+13. Añadir notificaciones por email para el flujo de aceptación.
+
+### P3 — Comercialización y operación
+
+14. Añadir localización en italiano (`it`), español (`es`) e inglés (`en`), con italiano
+    como idioma inicial.
+15. Añadir planes, límites de uso y suscripciones para profesionales.
+16. Añadir monitoring, backups verificados y preview deployments.
 
 ## Incidencias resueltas
 
