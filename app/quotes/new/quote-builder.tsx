@@ -12,19 +12,23 @@ import {
   type QuoteInputs,
   type QuoteMode,
   type QuoteParty,
+  type SavedQuote,
 } from "@/lib/quote/types";
 
 type Props = {
   models: CatalogModel[];
   prices: Record<string, number>;
+  initialQuote?: SavedQuote | null;
 };
 
-export default function QuoteBuilder({ models, prices }: Props) {
-  const [party, setParty] = useState<QuoteParty>(DEFAULT_PARTY);
-  const [inputs, setInputs] = useState<QuoteInputs>(DEFAULT_INPUTS);
-  const [appVersion, setAppVersion] = useState<"pro" | "lite">("pro");
-  const [quoteMode, setQuoteMode] = useState<QuoteMode>("completo");
-  const [bom, setBom] = useState<ReturnType<typeof calculateQuote>["bom"]>({});
+export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
+  const [party, setParty] = useState<QuoteParty>(initialQuote ?? DEFAULT_PARTY);
+  const [inputs, setInputs] = useState<QuoteInputs>(initialQuote?.inputs ?? DEFAULT_INPUTS);
+  const [appVersion, setAppVersion] = useState<"pro" | "lite">(initialQuote?.appVersion ?? "pro");
+  const [quoteMode, setQuoteMode] = useState<QuoteMode>(initialQuote?.quoteMode ?? "completo");
+  const [bom, setBom] = useState<ReturnType<typeof calculateQuote>["bom"]>(
+    initialQuote?.bomState ?? {},
+  );
   const [message, setMessage] = useState("");
 
   const result = useMemo(
@@ -63,6 +67,7 @@ export default function QuoteBuilder({ models, prices }: Props) {
     setMessage("Salvataggio...");
     try {
       const saved = await saveQuote({
+        id: initialQuote?.id,
         party,
         appVersion,
         quoteMode,
