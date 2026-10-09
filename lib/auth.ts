@@ -4,14 +4,20 @@ import { nextCookies } from "better-auth/next-js";
 import { db } from "@/lib/db";
 import * as schema from "@/lib/db/schema";
 
+const trustedOrigins = [
+  process.env.BETTER_AUTH_URL,
+  ...(process.env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+].filter((origin): origin is string => Boolean(origin));
+
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
-  trustedOrigins: [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://172.42.1.18:3000",
-  ],
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
