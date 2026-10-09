@@ -7,6 +7,7 @@
 3. [x] Revisar rate limiting, CSRF, orígenes confiables y cookies HTTPS.
 4. [x] Añadir validación server-side de todos los inputs y límites numéricos.
 5. [x] Añadir CI con lint, typecheck, build y migración en una base de prueba (requiere configurar `TEST_DATABASE_URL` en GitHub).
+6. [ ] Añadir pruebas específicas de integración con Supabase: conexión, esquema, autenticación y persistencia.
 
 ## Próximo ciclo
 

@@ -12,11 +12,17 @@ const trustedOrigins = [
     .filter(Boolean),
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  // vr_npm serves Next from a new 172.42.x container address on each start.
+  "http://172.42.*:3000",
 ].filter((origin): origin is string => Boolean(origin));
 
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: {
+    allowedHosts: ["localhost", "127.0.0.1", "172.42.*"],
+    fallback: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
+    protocol: process.env.NODE_ENV === "production" ? "https" : "http",
+  },
   trustedOrigins,
   rateLimit: {
     enabled: true,
