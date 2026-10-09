@@ -2,7 +2,7 @@
 
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { catalogModels, catalogPrices, clients, quotes } from "@/lib/db/schema";
+import { catalogModels, catalogPrices, clients, quoteEvents, quotes } from "@/lib/db/schema";
 import { requireStaff } from "@/lib/session";
 import { validateQuotePayload } from "@/lib/quote/validation";
 import type {
@@ -99,6 +99,15 @@ export async function getQuote(id: string): Promise<SavedQuote | null> {
   };
 }
 
+export async function getQuoteEvents(id: string) {
+  await requireStaff();
+  return db
+    .select()
+    .from(quoteEvents)
+    .where(eq(quoteEvents.quoteId, id))
+    .orderBy(quoteEvents.createdAt);
+}
+
 export async function saveQuote(payload: {
   id?: string;
   party: QuoteParty;
@@ -157,6 +166,19 @@ export async function saveQuote(payload: {
   } else {
     await db.insert(quotes).values({ id, createdAt: now, ...values });
   }
+  await db.insert(quoteEvents).values({
+    id: crypto.randomUUID(),
+    quoteId: id,
+    userId: session.user.id,
+    eventType: existing ? "updated" : "created",
+    payload: {
+      total: payload.totals.total,
+      clientName: payload.party.clientName,
+      appVersion: payload.appVersion,
+      quoteMode: payload.quoteMode,
+    },
+    createdAt: now,
+  });
 
   return { id };
 }

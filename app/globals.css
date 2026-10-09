@@ -325,6 +325,22 @@ h1 {
   margin-top: 24px;
 }
 
+.audit-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.audit-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  text-transform: capitalize;
+}
+
 .catalog-admin-row {
   display: grid;
   grid-template-columns: 1fr 150px auto;

@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getQuote } from "@/app/actions/quotes";
+import { getQuote, getQuoteEvents } from "@/app/actions/quotes";
 
 export const dynamic = "force-dynamic";
 
 export default async function QuoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const quote = await getQuote(id);
+  const [quote, events] = await Promise.all([getQuote(id), getQuoteEvents(id)]);
   if (!quote) notFound();
 
   return (
@@ -32,6 +32,17 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
           <p><strong>Dimensiones</strong><br />{quote.inputs.poolL} × {quote.inputs.poolW} × {quote.inputs.poolH} m</p>
           <p><strong>Total</strong><br />€ {quote.totals.total.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
         </div>
+      </section>
+      <section className="builder-card">
+        <h2>Historial</h2>
+        <ul className="audit-list">
+          {events.map((event) => (
+            <li key={event.id}>
+              <strong>{event.eventType}</strong>
+              <span className="muted">{event.createdAt.toLocaleString("es-ES")}</span>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
