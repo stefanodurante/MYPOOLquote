@@ -36,15 +36,18 @@ async function main() {
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
-  const supabaseResponse = await fetch(`${supabaseUrl}/rest/v1/`, {
+  const supabaseResponse = await fetch(
+    `${supabaseUrl}/rest/v1/catalog_models?select=id&limit=1`,
+    {
     headers: {
       apikey: publishableKey,
       Authorization: `Bearer ${publishableKey}`,
     },
-  });
+    },
+  );
   assert.ok(
     supabaseResponse.ok,
-    `Supabase REST endpoint returned HTTP ${supabaseResponse.status}.`,
+    `Supabase catalog endpoint returned HTTP ${supabaseResponse.status}.`,
   );
 
   const schemaResult = await db.execute<{ table_name: string }>(sql`
