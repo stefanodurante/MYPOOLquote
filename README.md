@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MYPOOLquote
 
-## Getting Started
+Aplicación web para crear, guardar y exportar presupuestos profesionales de piscinas.
 
-First, run the development server:
+## Estado actual
+
+- Next.js 15 + TypeScript
+- Better Auth con usuarios `staff`
+- Supabase PostgreSQL + Drizzle ORM
+- Catálogo y precios persistidos en base de datos
+- Calculadora PRO/LITE y exportación PDF
+- PWA preparada para móvil
+
+## Inicio rápido
+
+Requisitos: Node.js 20+, npm y una base PostgreSQL/Supabase.
 
 ```bash
+npm install
+cp .env.example .env.local
+# completar .env.local
+npm run setup
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre `http://localhost:3000/login`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | Uso |
+| --- | --- |
+| `npm run dev` | Desarrollo |
+| `npm run lint` | ESLint |
+| `npm run build` | Build de producción |
+| `npm run check:env` | Validar variables sin imprimir secretos |
+| `npm run setup` | Validar entorno, schema y usuario staff |
+| `npm run db:push` | Aplicar schema Drizzle |
+| `npm run seed:staff` | Crear usuario staff |
+| `npm run reset:staff` | Eliminar usuario staff para recrearlo |
 
-## Learn More
+## Documentación
 
-To learn more about Next.js, take a look at the following resources:
+- [Instalación](docs/INSTALLATION.md)
+- [Arquitectura](docs/ARCHITECTURE.md)
+- [Despliegue web](docs/DEPLOYMENT.md)
+- [Operaciones](docs/OPERATIONS.md)
+- [Mejoras pendientes](docs/IMPROVEMENTS.md)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Seguridad
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`.env.local` está ignorado y nunca debe subirse al repositorio. En producción usa los secretos del proveedor de hosting. No reutilices la contraseña de PostgreSQL como contraseña de staff.
