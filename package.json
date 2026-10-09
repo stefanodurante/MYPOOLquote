@@ -7,6 +7,7 @@
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "check:env": "tsx scripts/check-env.ts",
     "test:quote": "tsx scripts/test-quote.ts",
     "setup": "bash scripts/setup.sh",
