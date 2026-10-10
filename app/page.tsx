@@ -24,7 +24,7 @@ export default async function Home({
   return (
     <main className="dashboard">
       <header className="dashboard-header">
-        <div className="brand"><img src="/logo-piscina.png" alt="MYPOOL" /><div><p className="eyebrow">MYPOOL QUOTATION</p><h1>Preventivi</h1></div></div>
+        <div className="brand"><img src="/logo-piscina.png" alt="MYPOOL" /><div><p className="eyebrow">MYPOOL QUOTATION · DEMO V1</p><h1>Preventivi</h1></div></div>
         <span className="user-pill">{session?.user.name ?? "Staff"}</span>
       </header>
       <section className="dashboard-hero"><div><p className="muted">Area riservata staff</p><h2>Gestisci i tuoi preventivi</h2><p className="muted">Cataloghi attivi: {catalog.models.length} · Voci di listino: {Object.keys(catalog.prices).length}</p></div><div className="builder-actions"><Link href="/admin/catalog" className="secondary-button">Catálogo</Link><Link href="/quotes/new" className="primary-button">Nuovo preventivo</Link></div></section>

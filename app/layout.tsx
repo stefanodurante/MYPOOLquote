@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MYPOOL Quotation",
+  title: "MYPOOL Quotation · Demo V1",
   description: "Preventivi professionali per piscine",
   manifest: "/manifest.json",
   icons: {

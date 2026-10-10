@@ -11,7 +11,7 @@ export default async function LoginPage({
     <main className="auth-shell">
       <section className="auth-card">
         <img src="/logo-piscina.png" alt="MYPOOL" className="auth-logo" />
-        <p className="eyebrow">MYPOOL QUOTATION</p>
+        <p className="eyebrow">MYPOOL QUOTATION · DEMO V1</p>
         <h1>Accesso staff</h1>
         <p className="muted">Accedi per creare e gestire i preventivi.</p>
 
