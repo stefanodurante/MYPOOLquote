@@ -43,6 +43,7 @@ Abre `http://localhost:3000/login`.
 - [Instalación](docs/INSTALLATION.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Despliegue web](docs/DEPLOYMENT.md)
+- [Guía de prueba en italiano](docs/TEST-IT.md)
 - [Operaciones](docs/OPERATIONS.md)
 - [Mejoras pendientes](docs/IMPROVEMENTS.md)
 
