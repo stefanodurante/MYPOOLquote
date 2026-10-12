@@ -41,6 +41,7 @@ Abre `http://localhost:3000/login`.
 ## Documentación
 
 - [Instalación](docs/INSTALLATION.md)
+- [Guía sencilla de instalación local](docs/GUIA-INSTALACION-LOCAL.md)
 - [Arquitectura](docs/ARCHITECTURE.md)
 - [Despliegue web](docs/DEPLOYMENT.md)
 - [Guía de prueba en italiano](docs/TEST-IT.md)
