@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getQuote, getQuoteEvents } from "@/app/actions/quotes";
+import { getSession } from "@/lib/session";
 
 export const dynamic = "force-dynamic";
 
 export default async function QuoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [quote, events] = await Promise.all([getQuote(id), getQuoteEvents(id)]);
+  const [quote, events, session] = await Promise.all([getQuote(id), getQuoteEvents(id), getSession()]);
   if (!quote) notFound();
 
   return (
@@ -24,7 +25,7 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
             <h2>{quote.clientName}</h2>
             <p className="muted">{quote.status} · {quote.appVersion.toUpperCase()} · {quote.quoteMode}</p>
           </div>
-          <Link href={`/quotes/new?edit=${quote.id}`} className="primary-button">Editar</Link>
+          {session?.user.role !== "customer" && <Link href={`/quotes/new?edit=${quote.id}`} className="primary-button">Editar</Link>}
         </div>
         <div className="form-grid">
           <p><strong>Dirección</strong><br />{quote.clientAddress}</p>

@@ -54,6 +54,11 @@ export const auth = betterAuth({
         defaultValue: "staff",
         input: false,
       },
+      organizationId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
     },
   },
   plugins: [nextCookies()],

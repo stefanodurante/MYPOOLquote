@@ -7,6 +7,16 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
+export const organizations = pgTable("organizations", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  taxId: text("tax_id").notNull().default(""),
+  logoUrl: text("logo_url"),
+  status: text("status").notNull().default("active"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -14,6 +24,7 @@ export const user = pgTable("user", {
   emailVerified: boolean("email_verified").notNull().default(false),
   image: text("image"),
   role: text("role").notNull().default("staff"),
+  organizationId: text("organization_id").references(() => organizations.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
@@ -67,6 +78,7 @@ export const catalogModels = pgTable("catalog_models", {
   poolType: text("pool_type").notNull(),
   imageUrl: text("image_url"),
   active: boolean("active").notNull().default(true),
+  organizationId: text("organization_id").references(() => organizations.id),
 });
 
 export const catalogPrices = pgTable("catalog_prices", {
@@ -74,6 +86,7 @@ export const catalogPrices = pgTable("catalog_prices", {
   label: text("label").notNull(),
   category: text("category").notNull(),
   value: doublePrecision("value").notNull(),
+  organizationId: text("organization_id").references(() => organizations.id),
 });
 
 export const clients = pgTable("clients", {
@@ -83,6 +96,7 @@ export const clients = pgTable("clients", {
   contact: text("contact").notNull().default(""),
   phone: text("phone").notNull().default(""),
   email: text("email").notNull().default(""),
+  organizationId: text("organization_id").references(() => organizations.id),
   createdBy: text("created_by")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -104,6 +118,7 @@ export const quotes = pgTable("quotes", {
   clientContact: text("client_contact").notNull().default(""),
   clientPhone: text("client_phone").notNull().default(""),
   clientEmail: text("client_email").notNull().default(""),
+  organizationId: text("organization_id").references(() => organizations.id),
   appVersion: text("app_version").notNull(),
   quoteMode: text("quote_mode").notNull(),
   status: text("status").notNull().default("saved"),
@@ -125,5 +140,6 @@ export const quoteEvents = pgTable("quote_events", {
     .references(() => user.id, { onDelete: "cascade" }),
   eventType: text("event_type").notNull(),
   payload: jsonb("payload").notNull(),
+  organizationId: text("organization_id").references(() => organizations.id),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

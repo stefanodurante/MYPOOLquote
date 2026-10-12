@@ -32,14 +32,23 @@ No uses la contraseña de PostgreSQL como contraseña de staff.
 ```bash
 npm run check:env
 npm run db:push
+npm run seed:organization
 npm run seed:staff
 ```
 
-El comando `seed:staff` crea el usuario indicado por `STAFF_EMAIL`. Si hay que recrearlo:
+`seed:organization` crea la organización inicial `org-default` y asocia los datos
+existentes. El comando `seed:staff` crea el usuario indicado por `STAFF_EMAIL`.
+Si hay que recrearlo:
 
 ```bash
 npm run reset:staff
 npm run seed:staff
+```
+
+Para comprobar el aislamiento entre organizaciones:
+
+```bash
+npm run test:multiuser
 ```
 
 ## Desarrollo

@@ -26,16 +26,10 @@ export default async function AdminPage() {
           <strong>Modelli piscine</strong>
           <span>Aggiungi e attiva i modelli disponibili nel wizard.</span>
         </Link>
-        <div className="admin-card admin-card-disabled">
-          <strong>Clienti finali</strong>
-          <span>Gestione clienti collegati ai professionisti.</span>
-          <small>In arrivo</small>
-        </div>
-        <div className="admin-card admin-card-disabled">
-          <strong>Professionisti</strong>
-          <span>Gestione installatori e organizzazioni.</span>
-          <small>In arrivo</small>
-        </div>
+        <Link href="/admin/users" className="admin-card">
+          <strong>Utenti e collegamenti</strong>
+          <span>Crea professional/customer e collega i clienti finali.</span>
+        </Link>
       </section>
     </main>
   );

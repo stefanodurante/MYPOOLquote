@@ -29,16 +29,19 @@ aplicación.
 ### P0 — Fundación multiusuario
 
 1. [x] Definir los roles `staff`, `professional` y `customer`, con permisos separados
-   (base de roles y helpers implementada; faltan sus flujos de producto).
+   y flujos básicos de gestión, creación y lectura.
 2. [x] Dividir el formulario de presupuesto en pasos, priorizando la experiencia móvil.
 3. [x] Hacer fiable el guardado del presupuesto, con feedback, navegación al detalle y
    prevención de pérdida accidental de datos.
 4. [x] Añadir pantalla de carga entre login y aplicación.
-5. Añadir aislamiento de datos por profesional/organización (`organizationId` o equivalente)
-   en usuarios, clientes, presupuestos, catálogo y eventos.
-6. Aplicar autorización server-side para impedir que un profesional vea o modifique datos
-   de otro profesional.
-7. Añadir tests de autorización y aislamiento entre dos profesionales.
+5. [x] Añadir aislamiento de datos por profesional/organización (`organizationId`) en
+   usuarios, clientes, presupuestos, catálogo y eventos. Se creó `organizations`, se
+   conservaron los datos actuales en `org-default` y se añadió `npm run seed:organization`.
+6. [x] Aplicar autorización server-side para impedir que un profesional vea o modifique
+   datos de otra organización. Staff mantiene acceso global; customer solo puede leer
+   presupuestos vinculados a sus clientes.
+7. [x] Añadir tests de autorización y aislamiento entre dos profesionales
+   (`npm run test:multiuser`).
 
 
 ### P1 — Producto para profesionales
@@ -69,3 +72,5 @@ aplicación.
 - Desactivado Turbopack en desarrollo para evitar errores de chunks SSR y del React Client Manifest.
 - Documentado el reinicio limpio de Next.js eliminando `.next` cuando quedan artefactos obsoletos.
 - Verificado el build de producción, el typecheck y el test de cálculo de presupuestos.
+- La base multiusuario requiere ejecutar `npm run db:push` y después
+  `npm run seed:organization` en cada entorno existente.

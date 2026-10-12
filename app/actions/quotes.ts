@@ -1,9 +1,9 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { and, eq, inArray, isNull, or } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { catalogModels, catalogPrices, clients, quoteEvents, quotes } from "@/lib/db/schema";
-import { requireStaff } from "@/lib/session";
+import { requireQuoteManager, requireQuoteReader } from "@/lib/session";
 import { validateQuotePayload } from "@/lib/quote/validation";
 import type {
   AppVersion,
@@ -21,10 +21,17 @@ export async function loadCatalog(): Promise<{
   models: CatalogModel[];
   prices: Record<string, number>;
 }> {
-  await requireStaff();
+  const context = await requireQuoteManager();
+  const catalogScope =
+    context.role === "staff"
+      ? undefined
+      : or(isNull(catalogModels.organizationId), eq(catalogModels.organizationId, context.organizationId!));
   const [modelsRows, priceRows] = await Promise.all([
-    db.select().from(catalogModels).where(eq(catalogModels.active, true)),
-    db.select().from(catalogPrices),
+    db
+      .select()
+      .from(catalogModels)
+      .where(and(eq(catalogModels.active, true), catalogScope)),
+    db.select().from(catalogPrices).where(catalogScope),
   ]);
 
   return {
@@ -49,10 +56,24 @@ export async function listQuotes(options: { search?: string; status?: string; pa
   > & { total: number })[];
   hasMore: boolean;
 }> {
-  await requireStaff();
+  const context = await requireQuoteReader();
   const page = Math.max(1, options.page ?? 1);
   const pageSize = 10;
-  const rows = await db.select().from(quotes).orderBy(quotes.updatedAt);
+  const customerClientIds =
+    context.role === "customer"
+      ? db.select({ id: clients.id }).from(clients).where(eq(clients.customerUserId, context.userId))
+      : undefined;
+  const rows = await db
+    .select()
+    .from(quotes)
+    .where(
+      context.role === "staff"
+        ? undefined
+        : context.role === "professional"
+          ? eq(quotes.organizationId, context.organizationId!)
+          : inArray(quotes.clientId, customerClientIds!),
+    )
+    .orderBy(quotes.updatedAt);
   const filtered = rows.reverse().filter((row) => {
     const matchesSearch =
       !options.search ||
@@ -77,8 +98,25 @@ export async function listQuotes(options: { search?: string; status?: string; pa
 }
 
 export async function getQuote(id: string): Promise<SavedQuote | null> {
-  await requireStaff();
-  const [row] = await db.select().from(quotes).where(eq(quotes.id, id)).limit(1);
+  const context = await requireQuoteReader();
+  const customerClientIds =
+    context.role === "customer"
+      ? db.select({ id: clients.id }).from(clients).where(eq(clients.customerUserId, context.userId))
+      : undefined;
+  const [row] = await db
+    .select()
+    .from(quotes)
+    .where(
+      and(
+        eq(quotes.id, id),
+        context.role === "staff"
+          ? undefined
+          : context.role === "professional"
+            ? eq(quotes.organizationId, context.organizationId!)
+            : inArray(quotes.clientId, customerClientIds!),
+      ),
+    )
+    .limit(1);
   if (!row) return null;
   return {
     id: row.id,
@@ -102,11 +140,19 @@ export async function getQuote(id: string): Promise<SavedQuote | null> {
 }
 
 export async function getQuoteEvents(id: string) {
-  await requireStaff();
+  const context = await requireQuoteReader();
+  if (context.role === "customer" && !(await getQuote(id))) return [];
   return db
     .select()
     .from(quoteEvents)
-    .where(eq(quoteEvents.quoteId, id))
+    .where(
+      and(
+        eq(quoteEvents.quoteId, id),
+        context.role === "staff" || context.role === "customer"
+          ? undefined
+          : eq(quoteEvents.organizationId, context.organizationId!),
+      ),
+    )
     .orderBy(quoteEvents.createdAt);
 }
 
@@ -120,7 +166,7 @@ export async function saveQuote(payload: {
   bomState: BomState;
   totals: QuoteTotals;
 }): Promise<{ id: string }> {
-  const session = await requireStaff();
+  const context = await requireQuoteManager();
   validateQuotePayload(payload);
   const now = new Date();
   const id = payload.id ?? crypto.randomUUID();
@@ -128,7 +174,12 @@ export async function saveQuote(payload: {
   const existingClient = await db
     .select()
     .from(clients)
-    .where(eq(clients.name, payload.party.clientName))
+    .where(
+      and(
+        eq(clients.name, payload.party.clientName),
+        context.role === "staff" ? undefined : eq(clients.organizationId, context.organizationId!),
+      ),
+    )
     .limit(1);
 
   let clientId = existingClient[0]?.id;
@@ -141,13 +192,15 @@ export async function saveQuote(payload: {
       contact: [payload.party.clientPhone, payload.party.clientEmail].filter(Boolean).join(" · "),
       phone: payload.party.clientPhone,
       email: payload.party.clientEmail,
-      createdBy: session.user.id,
+      organizationId: context.organizationId,
+      createdBy: context.userId,
     });
   }
 
   const values = {
-    createdBy: session.user.id,
+    createdBy: context.userId,
     clientId,
+    organizationId: context.organizationId,
     builderName: payload.party.builderName,
     builderRef: payload.party.builderRef,
     builderPiva: payload.party.builderPiva,
@@ -166,7 +219,16 @@ export async function saveQuote(payload: {
     updatedAt: now,
   };
 
-  const [existing] = await db.select({ id: quotes.id }).from(quotes).where(eq(quotes.id, id)).limit(1);
+  const [existing] = await db
+    .select({ id: quotes.id })
+    .from(quotes)
+    .where(
+      and(
+        eq(quotes.id, id),
+        context.role === "staff" ? undefined : eq(quotes.organizationId, context.organizationId!),
+      ),
+    )
+    .limit(1);
   if (existing) {
     await db.update(quotes).set(values).where(eq(quotes.id, id));
   } else {
@@ -175,7 +237,7 @@ export async function saveQuote(payload: {
   await db.insert(quoteEvents).values({
     id: crypto.randomUUID(),
     quoteId: id,
-    userId: session.user.id,
+    userId: context.userId,
     eventType: existing ? "updated" : "created",
     payload: {
       total: payload.totals.total,
@@ -183,6 +245,7 @@ export async function saveQuote(payload: {
       appVersion: payload.appVersion,
       quoteMode: payload.quoteMode,
     },
+    organizationId: context.organizationId,
     createdAt: now,
   });
 

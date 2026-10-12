@@ -13,12 +13,12 @@ export default async function Home({
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? 1) || 1);
   const session = await getSession();
-  if (!session?.user || session.user.role !== "staff") {
+  if (!session?.user || !["staff", "professional", "customer"].includes(session.user.role)) {
     redirect("/login");
   }
   const [quotePage, catalog] = await Promise.all([
     listQuotes({ search: params.q, status: params.status, page }),
-    loadCatalog(),
+    session.user.role === "customer" ? Promise.resolve({ models: [], prices: {} }) : loadCatalog(),
   ]);
   const quotes = quotePage.quotes;
   const query = new URLSearchParams();
@@ -29,9 +29,9 @@ export default async function Home({
     <main className="dashboard">
       <header className="dashboard-header">
         <div className="brand"><img src="/logo-piscina.png" alt="MYPOOL" /><div><p className="eyebrow">MYPOOL QUOTATION</p><h1>Preventivi</h1></div></div>
-        <span className="user-pill">{session?.user.name ?? "Staff"}</span>
+        <span className="user-pill">{session?.user.name ?? session.user.role}</span>
       </header>
-      <section className="dashboard-hero"><div><p className="muted">Area riservata staff</p><h2>Gestisci i tuoi preventivi</h2><p className="muted">Modelli attivi: {catalog.models.length} · Voci di listino: {Object.keys(catalog.prices).length}</p></div><div className="builder-actions"><Link href="/admin" className="secondary-button">Amministrazione</Link><Link href="/quotes/new" className="primary-button">Nuovo preventivo</Link></div></section>
+      <section className="dashboard-hero"><div><p className="muted">Area riservata {session.user.role}</p><h2>{session.user.role === "customer" ? "I miei preventivi" : "Gestisci i tuoi preventivi"}</h2><p className="muted">{session.user.role === "customer" ? "Visualizzazione sola lectura dei preventivi condivisi." : `Modelli attivi: ${catalog.models.length} · Voci di listino: ${Object.keys(catalog.prices).length}`}</p></div><div className="builder-actions">{session.user.role === "staff" && <Link href="/admin" className="secondary-button">Amministrazione</Link>}{session.user.role !== "customer" && <Link href="/quotes/new" className="primary-button">Nuovo preventivo</Link>}</div></section>
       <section className="quote-list">
         <div className="section-heading"><h2>Preventivos recientes</h2><span className="muted">Página {page}</span></div>
         <form className="quote-filters">
