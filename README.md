@@ -35,6 +35,7 @@ Abre `http://localhost:3000/login`.
 | `npm run check:env` | Validar variables sin imprimir secretos |
 | `npm run setup` | Validar entorno, schema y usuario staff |
 | `npm run db:push` | Aplicar schema Drizzle |
+| `npm run seed:catalog` | Crear modelos y precios iniciales del catálogo |
 | `npm run seed:staff` | Crear usuario staff |
 | `npm run reset:staff` | Eliminar usuario staff para recrearlo |
 

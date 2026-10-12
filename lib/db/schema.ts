@@ -66,6 +66,7 @@ export const catalogModels = pgTable("catalog_models", {
   depthM: doublePrecision("depth_m").notNull(),
   poolType: text("pool_type").notNull(),
   imageUrl: text("image_url"),
+  active: boolean("active").notNull().default(true),
 });
 
 export const catalogPrices = pgTable("catalog_prices", {
@@ -80,6 +81,8 @@ export const clients = pgTable("clients", {
   name: text("name").notNull(),
   address: text("address").notNull().default(""),
   contact: text("contact").notNull().default(""),
+  phone: text("phone").notNull().default(""),
+  email: text("email").notNull().default(""),
   createdBy: text("created_by")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
@@ -99,6 +102,8 @@ export const quotes = pgTable("quotes", {
   clientName: text("client_name").notNull(),
   clientAddress: text("client_address").notNull().default(""),
   clientContact: text("client_contact").notNull().default(""),
+  clientPhone: text("client_phone").notNull().default(""),
+  clientEmail: text("client_email").notNull().default(""),
   appVersion: text("app_version").notNull(),
   quoteMode: text("quote_mode").notNull(),
   status: text("status").notNull().default("saved"),

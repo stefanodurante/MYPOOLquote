@@ -98,6 +98,12 @@ Aplica las tablas de la aplicación:
 npm run db:push
 ```
 
+Carga los modelos de piscinas y precios iniciales:
+
+```bash
+npm run seed:catalog
+```
+
 Crea el usuario staff:
 
 ```bash

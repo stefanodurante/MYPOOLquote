@@ -10,6 +10,7 @@ export type CatalogModel = {
   h: number;
   type: PoolType;
   imageUrl?: string | null;
+  active?: boolean;
 };
 
 export type QuoteInputs = {
@@ -63,7 +64,8 @@ export type QuoteParty = {
   builderPiva: string;
   clientName: string;
   clientAddress: string;
-  clientContact: string;
+  clientPhone: string;
+  clientEmail: string;
 };
 
 export type SavedQuote = QuoteParty & {
@@ -103,7 +105,8 @@ export const DEFAULT_PARTY: QuoteParty = {
   builderPiva: "IT12345678901",
   clientName: "Giuseppe Verdi",
   clientAddress: "Via Roma 10, Milano",
-  clientContact: "333 1234567 - info@email.it",
+  clientPhone: "333 1234567",
+  clientEmail: "info@email.it",
 };
 
 export const LINING_OPTIONS = [

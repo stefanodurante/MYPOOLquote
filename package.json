@@ -15,6 +15,7 @@
     "test:supabase": "tsx scripts/test-supabase.ts",
     "setup": "bash scripts/setup.sh",
     "db:push": "drizzle-kit push",
+    "seed:catalog": "tsx scripts/seed-catalog.ts",
     "reset:staff": "tsx scripts/reset-staff.ts",
     "seed:staff": "BETTER_AUTH_ALLOW_SIGNUP=true tsx scripts/seed-staff.ts"
   },

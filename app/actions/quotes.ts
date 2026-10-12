@@ -23,7 +23,7 @@ export async function loadCatalog(): Promise<{
 }> {
   await requireStaff();
   const [modelsRows, priceRows] = await Promise.all([
-    db.select().from(catalogModels),
+    db.select().from(catalogModels).where(eq(catalogModels.active, true)),
     db.select().from(catalogPrices),
   ]);
 
@@ -36,6 +36,7 @@ export async function loadCatalog(): Promise<{
       h: m.depthM,
       type: m.poolType as CatalogModel["type"],
       imageUrl: m.imageUrl,
+      active: m.active,
     })),
     prices: Object.fromEntries(priceRows.map((p) => [p.key, p.value])),
   };
@@ -86,7 +87,8 @@ export async function getQuote(id: string): Promise<SavedQuote | null> {
     builderPiva: row.builderPiva,
     clientName: row.clientName,
     clientAddress: row.clientAddress,
-    clientContact: row.clientContact,
+    clientPhone: row.clientPhone || row.clientContact,
+    clientEmail: row.clientEmail,
     appVersion: row.appVersion as AppVersion,
     quoteMode: row.quoteMode as QuoteMode,
     status: row.status,
@@ -136,7 +138,9 @@ export async function saveQuote(payload: {
       id: clientId,
       name: payload.party.clientName,
       address: payload.party.clientAddress,
-      contact: payload.party.clientContact,
+      contact: [payload.party.clientPhone, payload.party.clientEmail].filter(Boolean).join(" · "),
+      phone: payload.party.clientPhone,
+      email: payload.party.clientEmail,
       createdBy: session.user.id,
     });
   }
@@ -149,7 +153,9 @@ export async function saveQuote(payload: {
     builderPiva: payload.party.builderPiva,
     clientName: payload.party.clientName,
     clientAddress: payload.party.clientAddress,
-    clientContact: payload.party.clientContact,
+    clientContact: [payload.party.clientPhone, payload.party.clientEmail].filter(Boolean).join(" · "),
+    clientPhone: payload.party.clientPhone,
+    clientEmail: payload.party.clientEmail,
     appVersion: payload.appVersion,
     quoteMode: payload.quoteMode,
     status: "saved",

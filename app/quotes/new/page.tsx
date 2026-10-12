@@ -22,7 +22,7 @@ export default async function NewQuotePage({
           <p className="eyebrow">MYPOOL QUOTATION</p>
           <h1>{initialQuote ? "Modifica preventivo" : "Nuovo preventivo"}</h1>
         </div>
-        <Link href="/" className="muted">← Preventivi</Link>
+        <div className="builder-actions"><Link href="/" className="muted">← Preventivi</Link><Link href="/admin" className="muted">Amministrazione</Link></div>
       </header>
       <QuoteBuilder models={catalog.models} prices={catalog.prices} initialQuote={initialQuote} />
     </main>

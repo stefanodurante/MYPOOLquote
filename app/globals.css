@@ -68,6 +68,12 @@ h1 {
   color: var(--muted);
 }
 
+.form-hint {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
 .auth-form {
   display: grid;
   gap: 18px;
@@ -210,6 +216,44 @@ h1 {
 
 .dashboard-hero .primary-button {
   text-decoration: none;
+  white-space: nowrap;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.admin-card {
+  display: grid;
+  gap: 8px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  color: var(--foreground);
+  text-decoration: none;
+}
+
+.admin-card:hover {
+  border-color: var(--accent);
+}
+
+.admin-card span,
+.admin-card small {
+  color: var(--muted);
+}
+
+.admin-card-disabled {
+  opacity: 0.65;
+}
+
+.catalog-active {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   white-space: nowrap;
 }
 
@@ -519,6 +563,10 @@ h1 {
 }
 
 @media (max-width: 600px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
   .wizard-step {
     min-height: 52px;
     font-size: 11px;

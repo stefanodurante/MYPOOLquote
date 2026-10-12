@@ -72,22 +72,23 @@ export async function generateQuotePdf(opts: {
   doc.text("DATI CLIENTE:", 14, 53);
   doc.setFont("helvetica", "normal");
   doc.text(
-    `Cliente: ${party.clientName} - Cantiere: ${party.clientAddress} (${party.clientContact})`,
+    `Cliente: ${party.clientName} - Cantiere: ${party.clientAddress}`,
     14,
     59,
   );
+  doc.text(`Telefono: ${party.clientPhone} - Email: ${party.clientEmail}`, 14, 65);
 
   doc.setFont("helvetica", "bold");
-  doc.text("SPECIFICHE CATALOGO UFFICIALE:", 14, 67);
+  doc.text("SPECIFICHE CATALOGO UFFICIALE:", 14, 73);
   doc.setFont("helvetica", "normal");
   doc.text(
     `Tipologia: ${inputs.poolType.toUpperCase()} | Membrana: Renolit Alkorplan ${inputs.liningModel.toUpperCase()}`,
     14,
-    73,
+    79,
   );
-  doc.text(`Dimensioni: ${inputs.poolL}m x ${inputs.poolW}m x ${inputs.poolH}m`, 14, 79);
+  doc.text(`Dimensioni: ${inputs.poolL}m x ${inputs.poolW}m x ${inputs.poolH}m`, 14, 85);
 
-  let y = 90;
+  let y = 96;
 
   if (appVersion === "lite") {
     doc.setFontSize(11);

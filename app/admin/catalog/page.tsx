@@ -14,7 +14,7 @@ export default async function CatalogAdminPage() {
     <main className="dashboard">
       <header className="dashboard-header">
         <div><p className="eyebrow">MYPOOL QUOTATION</p><h1>Administrar catálogo</h1></div>
-        <Link href="/" className="muted">← Preventivos</Link>
+        <div className="builder-actions"><Link href="/admin/catalog/models" className="secondary-button">Modelli piscine</Link><Link href="/admin" className="muted">← Amministrazione</Link></div>
       </header>
       <section className="builder-card">
         <p className="muted">Los cambios afectan a nuevos cálculos. Los presupuestos guardados conservan sus importes.</p>

@@ -41,7 +41,11 @@ export function validateQuotePayload(payload: {
   text(payload.party.builderPiva, "builder VAT number", 40);
   text(payload.party.clientName, "client name", 160);
   text(payload.party.clientAddress, "client address", 300);
-  text(payload.party.clientContact, "client contact", 160);
+  text(payload.party.clientPhone, "client phone", 40);
+  text(payload.party.clientEmail, "client email", 160);
+  if (payload.party.clientEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.party.clientEmail)) {
+    throw new Error("Invalid client email.");
+  }
 
   if (!appVersions.includes(payload.appVersion) || !quoteModes.includes(payload.quoteMode)) {
     throw new Error("Invalid quote mode.");

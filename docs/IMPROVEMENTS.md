@@ -16,6 +16,9 @@
 3. [x] Panel staff de administración de catálogo y precios (`/admin/catalog`).
 4. [x] Historial/auditoría de creación y actualización de presupuestos.
 5. [x] Exportación de PDF con logo, numeración y datos fiscales del presupuesto.
+6. [x] Seed idempotente y administración staff de modelos de piscinas (`npm run seed:catalog` y `/admin/catalog/models`).
+7. [x] Separación de teléfono y email del cliente final en el presupuesto.
+8. [x] Hub staff de administración (`/admin`) para catálogo y futuras gestiones.
 
 ## Backlog futuro priorizado
 

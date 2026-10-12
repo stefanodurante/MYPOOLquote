@@ -154,12 +154,13 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
           {([
             ["clientName", "Nome cliente"],
             ["clientAddress", "Indirizzo cantiere"],
-            ["clientContact", "Telefono / email"],
+            ["clientPhone", "Telefono"],
+            ["clientEmail", "Email"],
             ["builderName", "Azienda"],
             ["builderRef", "Referente"],
             ["builderPiva", "Partita IVA"],
           ] as const).map(([key, label]) => (
-            <label key={key}>{label}<input value={party[key]} onChange={(e) => updateParty(key, e.target.value)} /></label>
+            <label key={key}>{label}<input type={key === "clientEmail" ? "email" : "text"} value={party[key]} onChange={(e) => updateParty(key, e.target.value)} /></label>
           ))}
         </div>
       </section>}
@@ -167,7 +168,7 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
       {step === 2 && <section className="builder-card">
         <div className="section-heading"><h2>2. Catalogo e misure</h2><span className="muted">Calcolo live</span></div>
         <div className="form-grid">
-          <label>Modello catalogo<select value={inputs.catalogModel} onChange={(e) => selectModel(e.target.value)}>{models.map((model) => <option value={model.id} key={model.id}>{model.label}</option>)}</select></label>
+          <label>Modello catalogo<select value={inputs.catalogModel} onChange={(e) => selectModel(e.target.value)} disabled={models.length === 0}>{models.map((model) => <option value={model.id} key={model.id}>{model.label}</option>)}</select>{models.length === 0 && <small className="form-hint">Nessun modello disponibile. Un membro staff deve eseguire il seed del catalogo.</small>}</label>
           <label>Tipologia<select value={inputs.poolType} onChange={(e) => updateInput("poolType", e.target.value as QuoteInputs["poolType"])}><option value="skimmer">Skimmer</option><option value="sfioratore">Bordo sfioratore</option><option value="vetroresina">Vetroresina</option><option value="fuoriterra">Fuori terra</option></select></label>
           {([["poolL", "Lunghezza (m)"], ["poolW", "Larghezza (m)"], ["poolH", "Profondità (m)"], ["solariumArea", "Solarium (mq)"]] as const).map(([key, label]) => <label key={key}>{label}<input type="number" step="0.1" value={inputs[key]} onChange={(e) => updateInput(key, Number(e.target.value))} /></label>)}
           <label>Membrana<select value={inputs.liningModel} onChange={(e) => updateInput("liningModel", e.target.value)}>{LINING_OPTIONS.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></label>

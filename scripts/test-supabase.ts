@@ -96,7 +96,9 @@ async function main() {
       id: clientId,
       name: "Supabase Integration Client",
       address: "Test address",
-      contact: "test@example.com",
+      contact: "123456",
+      phone: "123456",
+      email: "test@example.com",
       createdBy: userId,
     });
     await db.insert(schema.quotes).values({
@@ -108,7 +110,9 @@ async function main() {
       builderPiva: "",
       clientName: "Supabase Integration Client",
       clientAddress: "Test address",
-      clientContact: "test@example.com",
+      clientContact: "123456 · test@example.com",
+      clientPhone: "123456",
+      clientEmail: "test@example.com",
       appVersion: "pro",
       quoteMode: "completo",
       status: "saved",

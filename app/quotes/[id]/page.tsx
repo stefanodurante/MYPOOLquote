@@ -28,7 +28,8 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
         </div>
         <div className="form-grid">
           <p><strong>Dirección</strong><br />{quote.clientAddress}</p>
-          <p><strong>Contacto</strong><br />{quote.clientContact}</p>
+          <p><strong>Telefono</strong><br />{quote.clientPhone || "—"}</p>
+          <p><strong>Email</strong><br />{quote.clientEmail || "—"}</p>
           <p><strong>Dimensiones</strong><br />{quote.inputs.poolL} × {quote.inputs.poolW} × {quote.inputs.poolH} m</p>
           <p><strong>Total</strong><br />€ {quote.totals.total.toLocaleString("it-IT", { minimumFractionDigits: 2 })}</p>
         </div>
