@@ -1,5 +1,7 @@
 # Guía sencilla de instalación local
 
+**Versión del documento:** 1.1
+
 Esta guía está pensada para un instalador de piscinas que necesita ejecutar
 MYPOOLquote en su ordenador, sin conocimientos de programación.
 

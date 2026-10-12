@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { DemoBadge } from "./demo-badge";
 import { PwaRegister } from "./pwa-register";
 
 const geistSans = Geist({
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MYPOOL Quotation",
+  title: "MYPOOL Quotation · Demo V1",
   description: "Preventivi professionali per piscine",
   manifest: "/manifest.json",
   icons: {
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <DemoBadge />
         <PwaRegister />
         {children}
       </body>

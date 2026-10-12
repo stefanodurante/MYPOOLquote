@@ -1,5 +1,7 @@
 # Guida rapida per il tester
 
+**Versione del documento:** 1.1
+
 ## 1. Aprire l'applicazione
 
 Apri l'URL di test ricevuto, ad esempio:
