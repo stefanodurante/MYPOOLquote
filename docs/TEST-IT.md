@@ -33,7 +33,7 @@ Questa è una credenziale temporanea per la demo:
 
 ```text
 Email: staff@mypoolquote.local
-Password: DemoV1-MYPOOL-2026!
+Password: staff-password
 ```
 
 Non usare questa credenziale in produzione reale. Dopo la demo, cambia la
