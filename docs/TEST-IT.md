@@ -27,17 +27,10 @@ connessione HTTPS.
 3. Scegli **Aggiungi alla schermata Home**.
 4. Conferma con **Aggiungi**.
 
-## 3. Accedere a Demo V1
+## 3. Accedere
 
-Questa è una credenziale temporanea per la demo:
-
-```text
-Email: staff@mypoolquote.local
-Password: staff-password
-```
-
-Non usare questa credenziale in produzione reale. Dopo la demo, cambia la
-password e ricrea l'utente staff.
+Usa l'indirizzo email e la password comunicati dal responsabile
+dell'installazione. Non pubblicare né condividere le credenziali.
 
 ## 4. Test principale
 
