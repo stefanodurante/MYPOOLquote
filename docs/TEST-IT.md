@@ -1,6 +1,6 @@
 # Guida rapida per il tester
 
-**Versione del documento:** 1.1
+**Versione del documento:** 1.2
 
 ## 1. Aprire l'applicazione
 
@@ -12,6 +12,15 @@ https://URL-DELL-APP.vercel.app
 
 Usa Chrome su Android oppure Safari su iPhone. L'applicazione richiede una
 connessione HTTPS.
+
+Per una guida rapida all'installazione apri:
+
+```text
+https://URL-DELL-APP.vercel.app/install
+```
+
+La pagina `/install` è pubblica e contiene il collegamento per aprire MYPOOL
+e le istruzioni specifiche per Android e iPhone.
 
 ## 2. Installare MYPOOL sul telefono
 

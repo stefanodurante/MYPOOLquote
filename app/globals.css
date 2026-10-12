@@ -102,6 +102,35 @@ input {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
+.install-card {
+  width: min(100%, 560px);
+}
+
+.install-section {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.install-section h2 {
+  margin: 0 0 10px;
+  font-size: 18px;
+}
+
+.install-section ol {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding-left: 22px;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+
+.install-card .form-hint {
+  display: block;
+  margin-top: 22px;
+}
+
 .auth-logo {
   width: 72px;
   height: 72px;
@@ -128,6 +157,10 @@ h1 {
   color: var(--muted);
   font-size: 12px;
   font-weight: 400;
+}
+
+.form-hint a {
+  color: var(--accent);
 }
 
 .auth-form {

@@ -1,5 +1,6 @@
 import { signInStaff } from "./actions";
 import { PasswordInput } from "./password-input";
+import Link from "next/link";
 
 export default async function LoginPage({
   searchParams,
@@ -33,6 +34,10 @@ export default async function LoginPage({
           {params.error && <p className="form-error">Email o password non validi.</p>}
           <button className="primary-button">Accedi</button>
         </form>
+        <p className="form-hint">
+          Vuoi provarla sul telefono?{" "}
+          <Link href="/install">Installa MYPOOL come app</Link>
+        </p>
       </section>
     </main>
   );

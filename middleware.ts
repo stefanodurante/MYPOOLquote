@@ -4,8 +4,9 @@ import { getSessionCookie } from "better-auth/cookies";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isLogin = pathname.startsWith("/login");
+  const isInstall = pathname.startsWith("/install");
 
-  if (isLogin) {
+  if (isLogin || isInstall) {
     return NextResponse.next();
   }
 
@@ -24,6 +25,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!api/auth|_next/static|_next/image|favicon.ico|logo-piscina.png|manifest.json|icons).*)",
+    "/((?!api/auth|_next/static|_next/image|favicon.ico|logo-piscina.png|manifest.json|icon-192.png|icon-512.png|icon.svg|icons).*)",
   ],
 };
