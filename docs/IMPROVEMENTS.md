@@ -66,6 +66,8 @@ aplicación.
     como idioma inicial.
 15. Añadir planes, límites de uso y suscripciones para profesionales.
 16. Añadir monitoring, backups verificados y preview deployments.
+17. [x] Añadir guía italiana de instalación y prueba de la PWA (`/install` y
+   `docs/TEST-IT.md`).
 
 ## Incidencias resueltas
 
