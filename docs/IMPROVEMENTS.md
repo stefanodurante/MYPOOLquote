@@ -27,11 +27,15 @@ aplicación.
 
 1. [x] Definir los roles `staff`, `professional` y `customer`, con permisos separados
    (base de roles y helpers implementada; faltan sus flujos de producto).
-2. Añadir aislamiento de datos por profesional/organización (`organizationId` o equivalente)
+2. [x] Dividir el formulario de presupuesto en pasos, priorizando la experiencia móvil.
+3. [x] Hacer fiable el guardado del presupuesto, con feedback, navegación al detalle y
+   prevención de pérdida accidental de datos.
+4. Añadir aislamiento de datos por profesional/organización (`organizationId` o equivalente)
    en usuarios, clientes, presupuestos, catálogo y eventos.
-3. Aplicar autorización server-side para impedir que un profesional vea o modifique datos
+5. Aplicar autorización server-side para impedir que un profesional vea o modifique datos
    de otro profesional.
-4. Añadir tests de autorización y aislamiento entre dos profesionales.
+6. Añadir tests de autorización y aislamiento entre dos profesionales.
+
 
 ### P1 — Producto para profesionales
 
