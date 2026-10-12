@@ -1,4 +1,5 @@
 import { signInStaff } from "./actions";
+import { PasswordInput } from "./password-input";
 
 export default async function LoginPage({
   searchParams,
@@ -27,12 +28,7 @@ export default async function LoginPage({
           </label>
           <label>
             Password
-            <input
-              type="password"
-              name="password"
-              autoComplete="current-password"
-              required
-            />
+            <PasswordInput />
           </label>
           {params.error && <p className="form-error">Email o password non validi.</p>}
           <button className="primary-button">Accedi</button>
