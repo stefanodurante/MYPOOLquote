@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { listQuotes, loadCatalog } from "@/app/actions/quotes";
 import { getSession } from "@/lib/session";
 
@@ -11,8 +12,11 @@ export default async function Home({
 }) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? 1) || 1);
-  const [session, quotePage, catalog] = await Promise.all([
-    getSession(),
+  const session = await getSession();
+  if (!session?.user || session.user.role !== "staff") {
+    redirect("/login");
+  }
+  const [quotePage, catalog] = await Promise.all([
     listQuotes({ search: params.q, status: params.status, page }),
     loadCatalog(),
   ]);
