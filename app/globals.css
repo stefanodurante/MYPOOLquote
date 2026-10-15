@@ -535,11 +535,30 @@ h1 {
 .form-grid input,
 .form-grid select {
   width: 100%;
+  min-height: 44px;
   padding: 10px 12px;
   border: 1px solid var(--border);
   border-radius: 9px;
   background: rgba(3, 7, 18, 0.75);
   color: var(--foreground);
+}
+
+.form-grid input:focus-visible,
+.form-grid select:focus-visible,
+.quote-filters input:focus-visible,
+.quote-filters select:focus-visible {
+  border-color: var(--accent);
+  outline: 3px solid rgba(56, 189, 248, 0.3);
+  outline-offset: 2px;
+}
+
+.form-grid input[aria-invalid="true"] {
+  border-color: #fb7185;
+  outline-color: rgba(251, 113, 133, 0.3);
+}
+
+.form-grid input[type="text"][inputmode="decimal"] {
+  font-variant-numeric: tabular-nums;
 }
 
 .builder-tabs {
