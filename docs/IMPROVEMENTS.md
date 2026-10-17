@@ -1,5 +1,11 @@
 # Mejoras pendientes
 
+## Versionado Demo
+
+La versión visible actual es `Demo V1.0.2`. Cada nueva feature debe incrementar
+la versión patch: `1.0.2` → `1.0.3`. Actualiza `lib/app-version.ts` para que el
+badge, los metadatos y la PWA mantengan una versión coherente.
+
 ## Antes de producción
 
 1. [x] Automatizar tests de cálculo, login, autorización y persistencia (`npm run test:quote` y `npm run test:integration`).
@@ -68,6 +74,8 @@ aplicación.
 16. Añadir monitoring, backups verificados y preview deployments.
 17. [x] Añadir guía italiana de instalación y prueba de la PWA (`/install` y
    `docs/TEST-IT.md`).
+18. [x] Detectar nuevas versiones de la PWA y permitir la actualización confirmada
+   por el usuario sin interrumpir el wizard con cambios sin guardar.
 
 ## Incidencias resueltas
 

@@ -1,6 +1,7 @@
 {
   "name": "MYPOOL Preventivi",
   "short_name": "MYPOOL",
+  "version": "1.0.2",
   "description": "Preventivi professionali per piscine",
   "start_url": "/",
   "scope": "/",

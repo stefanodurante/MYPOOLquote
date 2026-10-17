@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:env": "tsx scripts/check-env.ts",
     "test:quote": "tsx scripts/test-quote.ts",
+    "test:inputs": "tsx scripts/test-inputs.ts",
     "test:roles": "tsx scripts/test-roles.ts",
     "test:integration": "tsx scripts/test-integration.ts",
     "test:multiuser": "tsx scripts/test-multiuser.ts",

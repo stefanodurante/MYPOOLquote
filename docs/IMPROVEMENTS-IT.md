@@ -1,5 +1,11 @@
 # Miglioramenti
 
+## Versione Demo
+
+La versione visibile attuale è `Demo V1.0.2`. Ogni nuova feature deve
+incrementare la versione patch: `1.0.2` → `1.0.3`. Aggiorna
+`lib/app-version.ts` per mantenere coerenti badge, metadati e PWA.
+
 ## Prima della produzione
 
 1. [x] Automatizzare i test di calcolo, login, autorizzazione e persistenza.
@@ -55,6 +61,8 @@
 2. Aggiungere piani, limiti e abbonamenti.
 3. Aggiungere monitoring, backup verificati e preview deployment.
 4. [x] Aggiungere la guida italiana per installazione e test della PWA.
+5. [x] Rilevare le nuove versioni della PWA e permettere l'aggiornamento
+   confermato dall'utente senza interrompere il wizard con modifiche non salvate.
 
 ## Note operative
 

@@ -1,7 +1,8 @@
 import Link from "next/link";
+import { DEMO_VERSION_LABEL } from "@/lib/app-version";
 
 export const metadata = {
-  title: "Installa MYPOOL · Demo V1",
+  title: `Installa MYPOOL · ${DEMO_VERSION_LABEL}`,
   description: "Guida italiana per installare MYPOOL come app sul telefono.",
 };
 
@@ -10,7 +11,7 @@ export default function InstallPage() {
     <main className="auth-shell">
       <section className="auth-card install-card">
         <img src="/icon-192.png" alt="MYPOOL" className="auth-logo" />
-        <p className="eyebrow">MYPOOL QUOTATION · DEMO V1</p>
+        <p className="eyebrow">MYPOOL QUOTATION · {DEMO_VERSION_LABEL}</p>
         <h1>Installa l&apos;app</h1>
         <p className="muted">
           MYPOOL è una PWA: puoi aggiungerla alla schermata Home senza

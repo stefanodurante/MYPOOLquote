@@ -5,6 +5,7 @@ import Link from "next/link";
 import { saveQuote } from "@/app/actions/quotes";
 import { calculateQuote, euro, applyCatalogModel } from "@/lib/quote/calculate";
 import { generateQuotePdf } from "@/lib/quote/pdf";
+import { numericDraft, parseNumericDraft } from "@/lib/quote/numeric-input";
 import {
   DEFAULT_INPUTS,
   DEFAULT_PARTY,
@@ -22,6 +23,31 @@ type Props = {
   initialQuote?: SavedQuote | null;
 };
 
+type NumericInputKey =
+  | "poolL"
+  | "poolW"
+  | "poolH"
+  | "solariumArea"
+  | "materialMarkup"
+  | "laborMarkup"
+  | "companyMargin";
+
+const NUMERIC_INPUTS: ReadonlyArray<{
+  key: NumericInputKey;
+  label: string;
+  min: number;
+  step: string;
+  required?: boolean;
+}> = [
+  { key: "poolL", label: "Lunghezza (m)", min: 0.1, step: "0.1", required: true },
+  { key: "poolW", label: "Larghezza (m)", min: 0.1, step: "0.1", required: true },
+  { key: "poolH", label: "Profondità (m)", min: 0.1, step: "0.1", required: true },
+  { key: "solariumArea", label: "Solarium (mq)", min: 0, step: "0.1" },
+  { key: "materialMarkup", label: "Ricarico materiali (%)", min: 0, step: "0.1", required: true },
+  { key: "laborMarkup", label: "Manodopera (%)", min: 0, step: "0.1", required: true },
+  { key: "companyMargin", label: "Margine (%)", min: 0, step: "0.1", required: true },
+];
+
 export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
   const [step, setStep] = useState(1);
   const [party, setParty] = useState<QuoteParty>(initialQuote ?? DEFAULT_PARTY);
@@ -35,6 +61,12 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
   const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const [savedQuoteId, setSavedQuoteId] = useState(initialQuote?.id ?? "");
   const [hasChanges, setHasChanges] = useState(false);
+  const [numericDrafts, setNumericDrafts] = useState<Record<NumericInputKey, string>>(() =>
+    Object.fromEntries(
+      NUMERIC_INPUTS.map(({ key }) => [key, numericDraft(initialQuote?.inputs[key] ?? DEFAULT_INPUTS[key])]),
+    ) as Record<NumericInputKey, string>,
+  );
+  const [invalidNumericKeys, setInvalidNumericKeys] = useState<NumericInputKey[]>([]);
 
   useEffect(() => {
     if (!hasChanges) return;
@@ -45,6 +77,22 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
     window.addEventListener("beforeunload", warnBeforeLeaving);
     return () => window.removeEventListener("beforeunload", warnBeforeLeaving);
   }, [hasChanges]);
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("mypoolquote:unsaved-changes", {
+        detail: { hasChanges },
+      }),
+    );
+  }, [hasChanges]);
+
+  useEffect(() => () => {
+    window.dispatchEvent(
+      new CustomEvent("mypoolquote:unsaved-changes", {
+        detail: { hasChanges: false },
+      }),
+    );
+  }, []);
 
   const result = useMemo(
     () => calculateQuote(inputs, prices, appVersion, quoteMode, bom),
@@ -57,6 +105,17 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
     setBom({});
   }
 
+  function updateNumericInput(key: NumericInputKey, value: string) {
+    setHasChanges(true);
+    setNumericDrafts((current) => ({ ...current, [key]: value }));
+    setInvalidNumericKeys((current) => current.filter((invalidKey) => invalidKey !== key));
+    const parsed = parseNumericDraft(value);
+    if (parsed !== null) {
+      setInputs((current) => ({ ...current, [key]: parsed }));
+      setBom({});
+    }
+  }
+
   function updateParty<K extends keyof QuoteParty>(key: K, value: string) {
     setHasChanges(true);
     setParty((current) => ({ ...current, [key]: value }));
@@ -65,7 +124,15 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
   function selectModel(id: string) {
     setHasChanges(true);
     const modelValues = applyCatalogModel(models, id);
-    if (modelValues) setInputs((current) => ({ ...current, catalogModel: id, ...modelValues }));
+    if (modelValues) {
+      setInputs((current) => ({ ...current, catalogModel: id, ...modelValues }));
+      setNumericDrafts((current) => ({
+        ...current,
+        poolL: numericDraft(modelValues.poolL),
+        poolW: numericDraft(modelValues.poolW),
+        poolH: numericDraft(modelValues.poolH),
+      }));
+    }
     else updateInput("catalogModel", id);
     setBom({});
   }
@@ -80,17 +147,42 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
 
   function nextStep() {
     if (step === 1 && !party.clientName.trim()) {
+      setSaveState("error");
       setMessage("Inserisci il nome del cliente prima di continuare.");
       return;
     }
+    if (step === 2) {
+      const measurementKeys: NumericInputKey[] = ["poolL", "poolW", "poolH"];
+      const invalidKeys = measurementKeys.filter((key) => {
+        const value = parseNumericDraft(numericDrafts[key]);
+        return value === null || value <= 0;
+      });
+      if (invalidKeys.length > 0) {
+        setSaveState("error");
+        setInvalidNumericKeys(invalidKeys);
+        setMessage("Inserisci misure della piscina maggiori di zero.");
+        return;
+      }
+    }
     if (step === 2 && (inputs.poolL <= 0 || inputs.poolW <= 0 || inputs.poolH <= 0)) {
+      setSaveState("error");
       setMessage("Inserisci misure della piscina maggiori di zero.");
       return;
     }
-    if (step === 3 && [inputs.materialMarkup, inputs.laborMarkup, inputs.companyMargin].some((value) => value < 0)) {
-      setMessage("I ricarichi e il margine non possono essere negativi.");
-      return;
+    if (step === 3) {
+      const markupKeys: NumericInputKey[] = ["materialMarkup", "laborMarkup", "companyMargin"];
+      const invalidKeys = markupKeys.filter((key) => {
+        const value = parseNumericDraft(numericDrafts[key]);
+        return value === null || value < 0;
+      });
+      if (invalidKeys.length > 0) {
+        setSaveState("error");
+        setInvalidNumericKeys(invalidKeys);
+        setMessage("Inserisci ricarichi e margine validi, uguali o maggiori di zero.");
+        return;
+      }
     }
+    setSaveState("idle");
     setMessage("");
     setStep((current) => Math.min(4, current + 1));
   }
@@ -160,7 +252,7 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
             ["builderRef", "Referente"],
             ["builderPiva", "Partita IVA"],
           ] as const).map(([key, label]) => (
-            <label key={key}>{label}<input type={key === "clientEmail" ? "email" : "text"} value={party[key]} onChange={(e) => updateParty(key, e.target.value)} /></label>
+            <label key={key} htmlFor={`quote-${key}`}>{label}<input id={`quote-${key}`} name={key} type={key === "clientEmail" ? "email" : "text"} value={party[key]} onChange={(e) => updateParty(key, e.target.value)} required={key === "clientName"} autoComplete={key === "clientEmail" ? "email" : key === "clientName" ? "name" : "street-address"} /></label>
           ))}
         </div>
       </section>}
@@ -168,19 +260,19 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
       {step === 2 && <section className="builder-card">
         <div className="section-heading"><h2>2. Catalogo e misure</h2><span className="muted">Calcolo live</span></div>
         <div className="form-grid">
-          <label>Modello catalogo<select value={inputs.catalogModel} onChange={(e) => selectModel(e.target.value)} disabled={models.length === 0}>{models.map((model) => <option value={model.id} key={model.id}>{model.label}</option>)}</select>{models.length === 0 && <small className="form-hint">Nessun modello disponibile. Un membro staff deve eseguire il seed del catalogo.</small>}</label>
-          <label>Tipologia<select value={inputs.poolType} onChange={(e) => updateInput("poolType", e.target.value as QuoteInputs["poolType"])}><option value="skimmer">Skimmer</option><option value="sfioratore">Bordo sfioratore</option><option value="vetroresina">Vetroresina</option><option value="fuoriterra">Fuori terra</option></select></label>
-          {([["poolL", "Lunghezza (m)"], ["poolW", "Larghezza (m)"], ["poolH", "Profondità (m)"], ["solariumArea", "Solarium (mq)"]] as const).map(([key, label]) => <label key={key}>{label}<input type="number" step="0.1" value={inputs[key]} onChange={(e) => updateInput(key, Number(e.target.value))} /></label>)}
-          <label>Membrana<select value={inputs.liningModel} onChange={(e) => updateInput("liningModel", e.target.value)}>{LINING_OPTIONS.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></label>
-          <label>Ricircolo<select value={inputs.turnoverTime} onChange={(e) => updateInput("turnoverTime", Number(e.target.value))}><option value={4}>4 ore</option><option value={6}>6 ore</option><option value={8}>8 ore</option></select></label>
+          <label htmlFor="quote-catalogModel">Modello catalogo<select id="quote-catalogModel" value={inputs.catalogModel} onChange={(e) => selectModel(e.target.value)} disabled={models.length === 0}>{models.map((model) => <option value={model.id} key={model.id}>{model.label}</option>)}</select>{models.length === 0 && <small className="form-hint">Nessun modello disponibile. Un membro staff deve eseguire il seed del catalogo.</small>}</label>
+          <label htmlFor="quote-poolType">Tipologia<select id="quote-poolType" value={inputs.poolType} onChange={(e) => updateInput("poolType", e.target.value as QuoteInputs["poolType"])}><option value="skimmer">Skimmer</option><option value="sfioratore">Bordo sfioratore</option><option value="vetroresina">Vetroresina</option><option value="fuoriterra">Fuori terra</option></select></label>
+          {NUMERIC_INPUTS.slice(0, 4).map(({ key, label, min, step, required }) => <label key={key} htmlFor={`quote-${key}`}>{label}<input id={`quote-${key}`} name={key} type="text" inputMode="decimal" value={numericDrafts[key]} onChange={(e) => updateNumericInput(key, e.target.value)} min={min} step={step} required={required} aria-invalid={invalidNumericKeys.includes(key)} aria-describedby={invalidNumericKeys.includes(key) ? "quote-numeric-error" : undefined} /></label>)}
+          <label htmlFor="quote-liningModel">Membrana<select id="quote-liningModel" value={inputs.liningModel} onChange={(e) => updateInput("liningModel", e.target.value)}>{LINING_OPTIONS.map((option) => <option value={option.value} key={option.value}>{option.label}</option>)}</select></label>
+          <label htmlFor="quote-turnoverTime">Ricircolo<select id="quote-turnoverTime" value={inputs.turnoverTime} onChange={(e) => updateInput("turnoverTime", Number(e.target.value))}><option value={4}>4 ore</option><option value={6}>6 ore</option><option value={8}>8 ore</option></select></label>
         </div>
       </section>}
 
       {step === 3 && <section className="builder-card">
         <div className="section-heading"><h2>3. Listino e totale</h2><div className="builder-tabs"><button type="button" className={appVersion === "pro" ? "active" : ""} onClick={() => { setHasChanges(true); setAppVersion("pro"); }}>PRO</button><button type="button" className={appVersion === "lite" ? "active" : ""} onClick={() => { setHasChanges(true); setAppVersion("lite"); }}>LITE</button></div></div>
         <div className="form-grid">
-          <label>Vista PRO<select value={quoteMode} onChange={(e) => { setHasChanges(true); setQuoteMode(e.target.value as QuoteMode); }}><option value="completo">Globale</option><option value="edile">Opere edili</option><option value="impianto">Impianto</option></select></label>
-          {([["materialMarkup", "Ricarico materiali (%)"], ["laborMarkup", "Manodopera (%)"], ["companyMargin", "Margine (%)"]] as const).map(([key, label]) => <label key={key}>{label}<input type="number" value={inputs[key]} onChange={(e) => updateInput(key, Number(e.target.value))} /></label>)}
+          <label htmlFor="quote-mode">Vista PRO<select id="quote-mode" value={quoteMode} onChange={(e) => { setHasChanges(true); setQuoteMode(e.target.value as QuoteMode); }}><option value="completo">Globale</option><option value="edile">Opere edili</option><option value="impianto">Impianto</option></select></label>
+          {NUMERIC_INPUTS.slice(4).map(({ key, label, min, step, required }) => <label key={key} htmlFor={`quote-${key}`}>{label}<input id={`quote-${key}`} name={key} type="text" inputMode="decimal" value={numericDrafts[key]} onChange={(e) => updateNumericInput(key, e.target.value)} min={min} step={step} required={required} aria-invalid={invalidNumericKeys.includes(key)} aria-describedby={invalidNumericKeys.includes(key) ? "quote-numeric-error" : undefined} /></label>)}
         </div>
         {appVersion === "pro" && <ul className="bom-editor">{result.items.map((item) => <li key={item.key}><label><input type="checkbox" checked={result.bom[item.key]?.checked ?? true} onChange={() => toggleItem(item.key)} />{item.name}</label><strong>€ {euro(result.bom[item.key]?.price ?? item.price)}</strong></li>)}</ul>}
         <div className="total-box"><p>Imponibile: € {euro(result.totals.imponibile)}</p><p>IVA: € {euro(result.totals.vat)}</p><strong>Totale: € {euro(result.totals.total)}</strong></div>
@@ -200,8 +292,9 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
           <button type="button" className="secondary-button" onClick={async () => generateQuotePdf({ party, inputs, appVersion, quoteMode, items: result.items, bom: result.bom, totals: result.totals })}>Genera PDF</button>
           {savedQuoteId && <Link href={`/quotes/${savedQuoteId}`} className="secondary-button">Apri preventivo salvato</Link>}
         </div>
-        {message && <p className={saveState === "error" ? "form-error" : "save-message"} role="status">{message}</p>}
       </section>}
+
+      {message && <p id="quote-numeric-error" className={saveState === "error" ? "form-error" : "save-message"} role={saveState === "error" ? "alert" : "status"} aria-live="polite">{message}</p>}
 
       <div className="wizard-navigation">
         <button type="button" className="secondary-button" onClick={() => setStep((current) => Math.max(1, current - 1))} disabled={step === 1}>← Indietro</button>

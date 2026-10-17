@@ -1,0 +1,34 @@
+---
+description: Global HTML, accessibility, mobile and PWA quality rules for MYPOOLquote
+alwaysApply: true
+---
+
+# Project quality rules
+
+## HTML and accessibility
+
+- Use semantic HTML elements (`main`, `header`, `nav`, `section`, `form`, `button`).
+- Every form control must have a visible label or an equivalent accessible name.
+- Connect labels and controls with matching `htmlFor`/`id` when they are not
+  nested.
+- Provide visible `:focus-visible` styles and preserve keyboard navigation.
+- Use `aria-live`, `aria-invalid` and `aria-describedby` for dynamic feedback
+  and validation errors when appropriate.
+- Keep heading order logical and use descriptive link and button text.
+- Do not use a clickable `div` when a native button or link is appropriate.
+
+## Mobile and PWA
+
+- Design for narrow screens first and keep controls easy to tap, with a minimum
+  target size of 44px where practical.
+- Use responsive layouts without horizontal scrolling at common mobile widths.
+- Use `inputMode`, suitable autocomplete values, and input types that match the
+  expected data.
+- Keep the manifest, icons, service worker and HTTPS installation flow working.
+- Verify touch feedback, focus states, loading states and reduced-motion behavior.
+
+## Feature completion
+
+- Increment the Demo patch version for every feature.
+- Run typecheck, lint, relevant tests and a production build before publishing.
+- Do not commit `.env.local`, credentials or other secrets.

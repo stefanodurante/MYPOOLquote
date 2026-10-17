@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { DemoBadge } from "./demo-badge";
 import { PwaRegister } from "./pwa-register";
+import { DEMO_VERSION_LABEL } from "@/lib/app-version";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MYPOOL Quotation · Demo V1",
+  title: `MYPOOL Quotation · ${DEMO_VERSION_LABEL}`,
   description: "Preventivi professionali per piscine",
   manifest: "/manifest.json",
   icons: {
