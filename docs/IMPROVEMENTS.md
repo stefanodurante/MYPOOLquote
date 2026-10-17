@@ -1,5 +1,11 @@
 # Mejoras pendientes
 
+## Versionado Demo
+
+La versión visible actual es `Demo V1.0.1`. Cada nueva feature debe incrementar
+la versión patch: `1.0.1` → `1.0.2`. Actualiza `lib/app-version.ts` para que el
+badge, los metadatos y la PWA mantengan una versión coherente.
+
 ## Antes de producción
 
 1. [x] Automatizar tests de cálculo, login, autorización y persistencia (`npm run test:quote` y `npm run test:integration`).

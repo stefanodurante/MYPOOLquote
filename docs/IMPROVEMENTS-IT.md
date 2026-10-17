@@ -1,5 +1,11 @@
 # Miglioramenti
 
+## Versione Demo
+
+La versione visibile attuale è `Demo V1.0.1`. Ogni nuova feature deve
+incrementare la versione patch: `1.0.1` → `1.0.2`. Aggiorna
+`lib/app-version.ts` per mantenere coerenti badge, metadati e PWA.
+
 ## Prima della produzione
 
 1. [x] Automatizzare i test di calcolo, login, autorizzazione e persistenza.

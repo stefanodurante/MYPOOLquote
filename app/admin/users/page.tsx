@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { clients, organizations, user } from "@/lib/db/schema";
 import { requireStaff } from "@/lib/session";
+import { DEMO_VERSION_LABEL } from "@/lib/app-version";
 import { createManagedUser, linkCustomerToClient } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +18,7 @@ export default async function AdminUsersPage() {
   return (
     <main className="dashboard">
       <header className="dashboard-header">
-        <div><p className="eyebrow">MYPOOL QUOTATION · Demo V1</p><h1>Usuarios y organizaciones</h1></div>
+        <div><p className="eyebrow">MYPOOL QUOTATION · {DEMO_VERSION_LABEL}</p><h1>Usuarios y organizaciones</h1></div>
         <a href="/admin" className="muted">← Administración</a>
       </header>
       <section className="builder-card">
