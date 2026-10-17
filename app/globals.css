@@ -240,6 +240,29 @@ h1 {
   color: white;
   font-weight: 700;
   cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
+  touch-action: manipulation;
+}
+
+.primary-button:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 18px rgba(14, 165, 233, 0.24);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.builder-tabs button:active,
+.wizard-step:active {
+  transform: translateY(2px) scale(0.98);
+  filter: brightness(0.9);
+}
+
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.builder-tabs button:focus-visible,
+.wizard-step:focus-visible {
+  outline: 3px solid rgba(56, 189, 248, 0.45);
+  outline-offset: 3px;
 }
 
 .primary-button:disabled {
@@ -668,6 +691,17 @@ h1 {
 
 .secondary-button {
   background: rgba(15, 23, 42, 0.9);
+  transition: transform 120ms ease, filter 120ms ease, background-color 120ms ease;
+  touch-action: manipulation;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary-button,
+  .secondary-button,
+  .builder-tabs button,
+  .wizard-step {
+    transition: none;
+  }
 }
 
 @media (max-width: 600px) {
