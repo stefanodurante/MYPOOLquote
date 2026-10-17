@@ -78,6 +78,22 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
     return () => window.removeEventListener("beforeunload", warnBeforeLeaving);
   }, [hasChanges]);
 
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("mypoolquote:unsaved-changes", {
+        detail: { hasChanges },
+      }),
+    );
+  }, [hasChanges]);
+
+  useEffect(() => () => {
+    window.dispatchEvent(
+      new CustomEvent("mypoolquote:unsaved-changes", {
+        detail: { hasChanges: false },
+      }),
+    );
+  }, []);
+
   const result = useMemo(
     () => calculateQuote(inputs, prices, appVersion, quoteMode, bom),
     [inputs, prices, appVersion, quoteMode, bom],
