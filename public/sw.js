@@ -1,4 +1,4 @@
-const APP_VERSION = "1.0.2";
+const APP_VERSION = "1.0.3";
 
 self.addEventListener("install", () => {
   // Keep the worker waiting until the user confirms the update.

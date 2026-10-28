@@ -14,10 +14,12 @@
     "test:roles": "tsx scripts/test-roles.ts",
     "test:integration": "tsx scripts/test-integration.ts",
     "test:multiuser": "tsx scripts/test-multiuser.ts",
+    "test:professional-profile": "tsx scripts/test-professional-profile.ts",
     "test:supabase": "tsx scripts/test-supabase.ts",
     "setup": "bash scripts/setup.sh",
     "db:push": "drizzle-kit push",
     "seed:organization": "tsx scripts/seed-organization.ts",
+    "seed:professional": "tsx scripts/seed-professional.ts",
     "seed:catalog": "tsx scripts/seed-catalog.ts",
     "reset:staff": "tsx scripts/reset-staff.ts",
     "seed:staff": "BETTER_AUTH_ALLOW_SIGNUP=true tsx scripts/seed-staff.ts"

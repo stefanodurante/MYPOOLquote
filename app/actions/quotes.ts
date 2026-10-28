@@ -22,16 +22,20 @@ export async function loadCatalog(): Promise<{
   prices: Record<string, number>;
 }> {
   const context = await requireQuoteManager();
-  const catalogScope =
+  const modelScope =
     context.role === "staff"
       ? undefined
       : or(isNull(catalogModels.organizationId), eq(catalogModels.organizationId, context.organizationId!));
+  const priceScope =
+    context.role === "staff"
+      ? undefined
+      : or(isNull(catalogPrices.organizationId), eq(catalogPrices.organizationId, context.organizationId!));
   const [modelsRows, priceRows] = await Promise.all([
     db
       .select()
       .from(catalogModels)
-      .where(and(eq(catalogModels.active, true), catalogScope)),
-    db.select().from(catalogPrices).where(catalogScope),
+      .where(and(eq(catalogModels.active, true), modelScope)),
+    db.select().from(catalogPrices).where(priceScope),
   ]);
 
   return {

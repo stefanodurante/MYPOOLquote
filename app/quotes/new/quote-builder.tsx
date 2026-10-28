@@ -21,6 +21,18 @@ type Props = {
   models: CatalogModel[];
   prices: Record<string, number>;
   initialQuote?: SavedQuote | null;
+  organization?: {
+    legalName: string;
+    taxId: string;
+    address: string;
+    postalCode: string;
+    city: string;
+    phone: string;
+    email: string;
+    logoUrl: string | null;
+    quotePrefix: string;
+    quoteFooter: string;
+  } | null;
 };
 
 type NumericInputKey =
@@ -48,7 +60,7 @@ const NUMERIC_INPUTS: ReadonlyArray<{
   { key: "companyMargin", label: "Margine (%)", min: 0, step: "0.1", required: true },
 ];
 
-export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
+export default function QuoteBuilder({ models, prices, initialQuote, organization }: Props) {
   const [step, setStep] = useState(1);
   const [party, setParty] = useState<QuoteParty>(initialQuote ?? DEFAULT_PARTY);
   const [inputs, setInputs] = useState<QuoteInputs>(initialQuote?.inputs ?? DEFAULT_INPUTS);
@@ -289,7 +301,7 @@ export default function QuoteBuilder({ models, prices, initialQuote }: Props) {
           <button type="button" className="primary-button" onClick={save} disabled={saveState === "saving"}>
             {saveState === "saving" ? "Salvataggio..." : "Salva preventivo"}
           </button>
-          <button type="button" className="secondary-button" onClick={async () => generateQuotePdf({ party, inputs, appVersion, quoteMode, items: result.items, bom: result.bom, totals: result.totals })}>Genera PDF</button>
+          <button type="button" className="secondary-button" onClick={async () => generateQuotePdf({ party, inputs, appVersion, quoteMode, items: result.items, bom: result.bom, totals: result.totals, organization: organization ?? undefined })}>Genera PDF</button>
           {savedQuoteId && <Link href={`/quotes/${savedQuoteId}`} className="secondary-button">Apri preventivo salvato</Link>}
         </div>
       </section>}
