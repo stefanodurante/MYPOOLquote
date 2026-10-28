@@ -52,7 +52,7 @@ aplicación.
 
 ### P1 — Producto para profesionales
 
-5. Crear onboarding y perfil profesional: empresa, datos fiscales, logo y configuración de
+5. [x] Crear onboarding y perfil profesional: empresa, datos fiscales, logo y configuración de
    presupuestos.
 6. Permitir que cada profesional gestione sus clientes y sus presupuestos.
 7. Permitir catálogo, precios y plantillas propias por profesional.
@@ -76,6 +76,17 @@ aplicación.
    `docs/TEST-IT.md`).
 18. [x] Detectar nuevas versiones de la PWA y permitir la actualización confirmada
    por el usuario sin interrumpir el wizard con cambios sin guardar.
+19. Añadir render visual de piscina bajo demanda en la página final de revisión,
+   con placeholder, loader, imagen de catálogo y aviso si los parámetros cambian.
+   La integración con un proveedor de IA real queda como tarea posterior.
+
+### P1.5 — Onboarding profesional implementado
+
+El profesional asociado a una organización puede completar y modificar su perfil en
+`/professional/onboarding` y `/professional/profile`. Los datos obligatorios se
+validan en servidor y se incorporan al PDF: razón social, NIF/Partita IVA,
+dirección, contacto, prefijo, pie de página y URL del logo. La migración segura se
+aplica con `npm run db:push`.
 
 ## Incidencias resueltas
 

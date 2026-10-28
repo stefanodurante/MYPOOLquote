@@ -38,6 +38,13 @@ npm run seed:staff
 
 `seed:organization` crea la organización inicial `org-default` y asocia los datos
 existentes. El comando `seed:staff` crea el usuario indicado por `STAFF_EMAIL`.
+Para crear un profesional de prueba asociado a esa organización:
+
+```bash
+PROFESSIONAL_EMAIL=professional@mypoolquote.local \
+PROFESSIONAL_PASSWORD='elige-una-password-segura' \
+npm run seed:professional
+```
 Si hay que recrearlo:
 
 ```bash

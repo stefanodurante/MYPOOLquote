@@ -18,16 +18,28 @@ export async function generateQuotePdf(opts: {
   items: LineItem[];
   bom: BomState;
   totals: QuoteTotals;
+  organization?: {
+    legalName: string;
+    taxId: string;
+    address: string;
+    postalCode: string;
+    city: string;
+    phone: string;
+    email: string;
+    logoUrl: string | null;
+    quotePrefix: string;
+    quoteFooter: string;
+  };
 }) {
-  const { party, inputs, appVersion, quoteMode, items, bom, totals } = opts;
+  const { party, inputs, appVersion, quoteMode, items, bom, totals, organization } = opts;
   const doc = new jsPDF();
-  const quoteNumber = `MP-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}-${party.clientName
+  const quoteNumber = `${organization?.quotePrefix || "MP"}-${new Date().toISOString().slice(0, 10).replaceAll("-", "")}-${party.clientName
     .replace(/[^a-zA-Z0-9]/g, "")
     .slice(0, 8)
     .toUpperCase()}`;
 
   try {
-    const response = await fetch("/logo-piscina.png");
+    const response = await fetch(organization?.logoUrl || "/logo-piscina.png");
     const logoData = await response.blob();
     const reader = new FileReader();
     const logo = await new Promise<string>((resolve, reject) => {
@@ -63,32 +75,36 @@ export async function generateQuotePdf(opts: {
   doc.text("DATI COSTRUTTORE:", 14, 39);
   doc.setFont("helvetica", "normal");
   doc.text(
-    `Azienda: ${party.builderName} (P.IVA: ${party.builderPiva}) - Rif: ${party.builderRef}`,
+    `Azienda: ${organization?.legalName || party.builderName} (P.IVA: ${organization?.taxId || party.builderPiva})`,
     14,
     45,
   );
+  if (organization) {
+    doc.text(`${organization.address}, ${organization.postalCode} ${organization.city}`, 14, 50);
+    doc.text(`Telefono: ${organization.phone} - Email: ${organization.email}`, 14, 55);
+  }
 
   doc.setFont("helvetica", "bold");
-  doc.text("DATI CLIENTE:", 14, 53);
+  doc.text("DATI CLIENTE:", 14, organization ? 63 : 53);
   doc.setFont("helvetica", "normal");
   doc.text(
     `Cliente: ${party.clientName} - Cantiere: ${party.clientAddress}`,
     14,
-    59,
+    organization ? 69 : 59,
   );
-  doc.text(`Telefono: ${party.clientPhone} - Email: ${party.clientEmail}`, 14, 65);
+  doc.text(`Telefono: ${party.clientPhone} - Email: ${party.clientEmail}`, 14, organization ? 75 : 65);
 
   doc.setFont("helvetica", "bold");
-  doc.text("SPECIFICHE CATALOGO UFFICIALE:", 14, 73);
+  doc.text("SPECIFICHE CATALOGO UFFICIALE:", 14, organization ? 83 : 73);
   doc.setFont("helvetica", "normal");
   doc.text(
     `Tipologia: ${inputs.poolType.toUpperCase()} | Membrana: Renolit Alkorplan ${inputs.liningModel.toUpperCase()}`,
     14,
-    79,
+    organization ? 89 : 79,
   );
-  doc.text(`Dimensioni: ${inputs.poolL}m x ${inputs.poolW}m x ${inputs.poolH}m`, 14, 85);
+  doc.text(`Dimensioni: ${inputs.poolL}m x ${inputs.poolW}m x ${inputs.poolH}m`, 14, organization ? 95 : 85);
 
-  let y = 96;
+  let y = organization ? 106 : 96;
 
   if (appVersion === "lite") {
     doc.setFontSize(11);
@@ -140,6 +156,11 @@ export async function generateQuotePdf(opts: {
   doc.setFontSize(13);
   doc.setTextColor(14, 165, 233);
   doc.text(`TOTALE: € ${euro(totals.total)}`, 170, y, { align: "right" });
+  if (organization?.quoteFooter) {
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.text(organization.quoteFooter, 14, 285, { maxWidth: 180 });
+  }
 
   const filename = `Preventivo_Catalog_${appVersion}_${party.clientName.replace(/\s+/g, "_")}.pdf`;
   doc.save(filename);

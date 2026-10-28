@@ -594,7 +594,8 @@ h1 {
 }
 
 .form-grid input,
-.form-grid select {
+.form-grid select,
+.form-grid textarea {
   width: 100%;
   min-height: 44px;
   padding: 10px 12px;
@@ -606,11 +607,21 @@ h1 {
 
 .form-grid input:focus-visible,
 .form-grid select:focus-visible,
+.form-grid textarea:focus-visible,
 .quote-filters input:focus-visible,
 .quote-filters select:focus-visible {
   border-color: var(--accent);
   outline: 3px solid rgba(56, 189, 248, 0.3);
   outline-offset: 2px;
+}
+
+.form-grid textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.form-grid label:has(textarea) {
+  grid-column: 1 / -1;
 }
 
 .form-grid input[aria-invalid="true"] {

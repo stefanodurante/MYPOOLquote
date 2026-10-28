@@ -40,6 +40,14 @@ npm run seed:staff
 `seed:organization` crea `org-default` e associa i dati esistenti.
 `seed:staff` crea l'utente indicato da `STAFF_EMAIL`. Per ricrearlo:
 
+Per creare un professionista demo associato a questa organizzazione:
+
+```bash
+PROFESSIONAL_EMAIL=professional@mypoolquote.local \
+PROFESSIONAL_PASSWORD='scegli-una-password-sicura' \
+npm run seed:professional
+```
+
 ```bash
 npm run reset:staff
 npm run seed:staff

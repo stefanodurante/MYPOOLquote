@@ -42,7 +42,8 @@ incrementare la versione patch: `1.0.2` → `1.0.3`. Aggiorna
 
 ### P1 — Prodotto per professionisti
 
-1. Creare onboarding e profilo professionale.
+1. [x] Creare onboarding e profilo professionale: azienda, dati fiscali, logo e
+   configurazione dei preventivi.
 2. Permettere la gestione dei clienti e dei preventivi.
 3. Permettere cataloghi, prezzi e modelli propri.
 4. Usare i dati fiscali e il marchio del professionista nel PDF.
@@ -63,6 +64,17 @@ incrementare la versione patch: `1.0.2` → `1.0.3`. Aggiorna
 4. [x] Aggiungere la guida italiana per installazione e test della PWA.
 5. [x] Rilevare le nuove versioni della PWA e permettere l'aggiornamento
    confermato dall'utente senza interrompere il wizard con modifiche non salvate.
+6. Aggiungere il render visivo della piscina su richiesta nella pagina finale
+   di revisione, con placeholder, loader, immagine del catalogo e avviso se i
+   parametri cambiano. L'integrazione con un provider IA reale sarà successiva.
+
+### P1.5 — Onboarding professionale implementato
+
+Il professionista associato a un'organizzazione può completare e modificare il
+profilo in `/professional/onboarding` e `/professional/profile`. I dati
+obbligatori sono validati lato server e vengono usati nel PDF: ragione sociale,
+Partita IVA, indirizzo, contatti, prefisso, piè di pagina e URL del logo.
+La migrazione sicura si applica con `npm run db:push`.
 
 ## Note operative
 
